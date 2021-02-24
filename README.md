@@ -47,4 +47,4 @@ values can be found.
 - Step 2. Open Simstack on your compute and connect to your remote resource.
 - Step 3. Drag the Vasp_Bulk WaNo from the top left menu to the empty area as the figure below shows.
 - Step 4. A double click on the WaNo will allow you to make the setups in the Input parameters.
-- Step 5. Name your WaNo with Ctrl+S, and running it with Ctrl+R command.
+- Step 5. Name your WaNo with `Ctrl+S`, and running it with `Ctrl+R` command.

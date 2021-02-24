@@ -5,15 +5,8 @@
 -- This WaNo perform a single DFT calculation using Vasp code in order to generate 
 an energy and volume values for a given Unit cell.
 
-.center[
-
 ![My image](DFT_VASP.png)
-
-.caption[
-**Fig. 1:** Image caption
-]
-
-]
+.caption[ **Fig. 1:** Image caption ]
 
 ![Semantic description of image](DFT_VASP.png)
 ** Fig 1** The DFT_VASP WaNo performs DFT calculation using Vasp code. In this WaNo, the POTCAR might be automatized after reading the POSCAR file. In the GUI, we can set the KPOINTS and INCAR files, but there is also the option to load the inputs file in the Files_Run tab.

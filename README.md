@@ -5,12 +5,7 @@ Figure 6 shows that this WaNo has the INCAR, KPOINTS, Analysis, and Files_Run ta
 
 ![Semantic description of image](DFT_VASP.png)
 
-<<<<<<< HEAD
-** Fig 1** The DFT_VASP WaNo performs DFT calculation using Vasp code. In this WaNo, the POTCAR might be automatized after reading the POSCAR file. In the GUI, we can set the KPOINTS and INCAR files, but there is also the option to load the inputs file in the Files_Run tab.
-=======
 **Fig 1** The DFT_VASP WaNo performs DFT calculation using Vasp code. In this WaNo, the POTCAR might be automatized after reading the POSCAR file. In the GUI, we can set the KPOINTS and INCAR files, but there is also the option to load the inputs file in the Files_Run tab.
->>>>>>> c412e06cbf73a1edee14c4aa36c5bf229ba66930
-
 ## 1. Python Setup
 To get this WaNo up running on your available computational resources, make sure to have the below libraries installed on Python 3.6 or newer.
 

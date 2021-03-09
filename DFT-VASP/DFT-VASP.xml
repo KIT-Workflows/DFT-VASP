@@ -1,0 +1,160 @@
+<WaNoTemplate>
+    
+    <WaNoMeta>
+ 		<Author>
+  			<Name> Celso R. C. Rego </Name>
+  			<Email>celsorego@kit.edu</Email>
+ 		</Author>
+
+		<Description>
+			This WaNo performs the DFT calculation using Vasp code. In this WaNo, the 
+			POTCAR might be automatically generated after reading the POSCAR file.
+ 		</Description>
+
+ 		<Keyword>DFT</Keyword>
+	</WaNoMeta>
+	
+	<WaNoRoot name="DFT-VASP">
+		<WaNoTabs name="TABS">
+			<WaNoGroup name="INCAR">
+				<WaNoFloat name="ENCUT" description = "The cutoff energy for the planewave basis set in eV">500.0</WaNoFloat>
+				<WaNoFloat name="EDIFFG" description = "Defines the break condition for the ionic relaxation loop">-0.020</WaNoFloat>
+				<WaNoInt name="ISPIN" description = "Specifies spin polarization">2</WaNoInt>
+				<WaNoInt name="NSW" description = "Sets the maximum number of ionic steps">100</WaNoInt>
+				<WaNoInt name="IBRION" description = "Determines how the ions are updated and moved">2</WaNoInt>
+				<WaNoInt name="ISIF" description= "Determines whether the stress tensor is calculated and which principal degrees-of-freedom are allowed to change in relaxation and molecular dynamics runs">3</WaNoInt>
+				<WaNoFloat name="POTIM" description = "Sets the time step (MD) or step width scaling (ionic relaxations).">0.25</WaNoFloat>
+
+
+				<WaNoDropDown name="GGA">
+					<Entry id="0" chosen="True">PE</Entry>
+						<Entry id="1">91</Entry>
+						<Entry id="2">PZ</Entry>
+						<Entry id="3">RP</Entry>
+						<Entry id="4">RE</Entry>
+						<Entry id="5">PS</Entry>
+						<Entry id="6">B3</Entry>
+						<Entry id="7">B5</Entry>
+					</WaNoDropDown>
+			
+					<WaNoDropDown name="IVDW">
+						<Entry id="0" chosen="True">0</Entry>
+						<Entry id="1">D2</Entry>
+						<Entry id="2">D3</Entry>
+						<Entry id="3">D3BJ</Entry>
+						<Entry id="4">dDsC</Entry>
+						<Entry id="5">TS</Entry>
+						<Entry id="6">TSSCS</Entry>
+						<Entry id="7">MBDSC</Entry>
+					</WaNoDropDown>
+				<WaNoBool name="SOC" description= "Spin-Orbit Coupling effects">False</WaNoBool>
+				<WaNoBool name="LWAVE" description= "Spin-Orbit Coupling effects">False</WaNoBool>
+				<WaNoBool name="LCHARGE" description= "Spin-Orbit Coupling effects">False</WaNoBool>				  
+			</WaNoGroup>
+
+			<WaNoGroup name="KPOINTS">
+
+				<WaNoBool name="Kpoints_length">False</WaNoBool>
+				<WaNoInt name="Rk_length" visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_length">20</WaNoInt>
+  				
+				<WaNoBool name="Kpoints_Monkhorst">False</WaNoBool>	
+				<WaNoMatrixFloat rows="2" cols="3" col_header="N1; N2; N3" row_header="divisions; shift" name="Monkhorst" 
+				visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_Monkhorst">[[0,0,0], [0,0,0]]</WaNoMatrixFloat>
+				
+				<!--
+				<WaNoBool name="Kpoints_path">False</WaNoBool>
+				<WaNoInt name="n_pts" visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_path">20</WaNoInt>
+				<WaNoMatrixFloat rows="2" cols="4" col_header="x; y; z" row_header="P1;P2" name="symmetry-point" 
+				visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_path">[["var1",0,0,0], ["var2",0,0,0]]</WaNoMatrixFloat> !-->
+
+			</WaNoGroup>
+
+		<WaNoGroup name="Analysis">
+			<WaNoBool name="DOS">False</WaNoBool>
+			<WaNoDictBox name="dos_calculation" visibility_condition="%s == True" visibility_var_path="TABS.Analysis.DOS">
+				<WaNoInt name="NEDOS" description="Specifies number of gridpoints on which the DOS is evaluated">101</WaNoInt>
+				<WaNoInt name="LORBIT" description="Together with an appropriate RWIGS, determines whether the PROCAR or PROOUT files are written">10</WaNoInt>	
+				<WaNoInt name="NSW" description = "Non-SC calculation">-1</WaNoInt>
+				<WaNoInt name="IBRION" description = "No inonic movement">-1</WaNoInt>
+				<WaNoString name="PREC" description = "Specifies the precision-mode">Accurate</WaNoString>
+			</WaNoDictBox>
+
+			<WaNoBool name="Band_Structure">False</WaNoBool>
+			<WaNoDictBox name="band" visibility_condition="%s == True" visibility_var_path="TABS.Analysis.Band_Structure">
+				<WaNoInt name="ICHARG" description="ICHARG determines how VASP constructs the initial charge density">11</WaNoInt>
+				<WaNoInt name="LORBIT" description="Together with an appropriate RWIGS, determines whether the PROCAR or PROOUT files are written">11</WaNoInt>
+				<WaNoInt name="NSW" description = "Non-SC calculation">0</WaNoInt>
+				<WaNoInt name="IBRION" description = "No inonic movement">-1</WaNoInt>
+				<WaNoString name="PREC" description = "Specifies the precision-mode">Accurate</WaNoString>	
+			</WaNoDictBox>
+
+
+			<WaNoBool name="Bader">False</WaNoBool>
+			<WaNoDictBox name="Mesh" visibility_condition="%s == True" visibility_var_path="TABS.Analysis.Bader">
+				<WaNoInt name="NGXF">60</WaNoInt>
+				<WaNoInt name="NGYF">60</WaNoInt>
+				<WaNoInt name="NGZF">60</WaNoInt>	
+			</WaNoDictBox>
+		</WaNoGroup>
+
+		<WaNoGroup name="Files_Run">
+
+			<WaNoDropDown name="prun_vasp">
+				<Entry id="0" chosen="True">vasp_std</Entry>
+				<Entry id="1">vasp_gam</Entry>
+				<Entry id="2">vasp_ncl</Entry>
+			</WaNoDropDown>
+			
+			<WaNoFile logical_filename="POSCAR"  name="POSCAR_file">/home/celso/Wanos_2020/Test1/VASP_test/POSCAR</WaNoFile>
+
+			<WaNoBool name="Import INCAR">False</WaNoBool>
+  			<WaNoFile logical_filename="INCAR" visibility_condition="%s == True"
+			visibility_var_path="TABS.Files_Run.Import INCAR" name="INCAR_file">/home/celso/Wanos_2020/Test1/VASP_test/INCAR</WaNoFile>
+
+			<WaNoBool name="Import POTCAR">False</WaNoBool>
+  			<WaNoFile logical_filename="POTCAR" visibility_condition="%s == True"
+			visibility_var_path="TABS.Files_Run.Import POTCAR" name="POTCAR_file">/home/celso/Wanos_2020/Test1/VASP_test/POTCAR</WaNoFile>
+
+			<WaNoBool name="Import KPOINTS">False</WaNoBool>
+  			<WaNoFile logical_filename="KPOINTS" visibility_condition="%s == True"
+			visibility_var_path="TABS.Files_Run.Import KPOINTS" name="KPOINTS_file">/home/celso/Wanos_2020/Test1/VASP_test/KPOINTS</WaNoFile>  
+
+			<WaNoBool name="Import KORINGA">False</WaNoBool>
+  			<WaNoFile logical_filename="KORINGA" visibility_condition="%s == True"
+			visibility_var_path="TABS.Files_Run.Import KORINGA" name="KORINGA_file">KORINGA path file</WaNoFile>
+		</WaNoGroup>
+
+		</WaNoTabs>
+	</WaNoRoot>
+	
+	<WaNoExecCommand>
+	source /home/ws/gt5111/miniconda3/etc/profile.d/conda.sh
+	conda activate
+	python gen_POTCAR.py
+	python incar.py 
+	python kpoints.py 
+
+	bash run_vasp.sh
+
+	{% if wano["TABS"]["Files_Run"]["Import KORINGA"] %}
+		{{ "sed -i '1i ########################\' OUTCAR" }}
+		{{ "cat KORINGA OUTCAR > OUTCAR_temp" }}
+		{{ "mv OUTCAR_temp OUTCAR" }}
+	{% else %}
+
+	{% endif %}
+
+	</WaNoExecCommand>
+	
+	<WaNoInputFiles>
+		<WaNoInputFile logical_filename="gen_POTCAR.py">gen_POTCAR.py</WaNoInputFile>
+		<WaNoInputFile logical_filename="incar.py">incar.py</WaNoInputFile>
+		<WaNoInputFile logical_filename="kpoints.py">kpoints.py</WaNoInputFile>	
+		<WaNoInputFile logical_filename="run_vasp.sh">run_vasp.sh</WaNoInputFile>
+	</WaNoInputFiles>
+	
+	<WaNoOutputFiles>
+		<WaNoOutputFile>OUTCAR</WaNoOutputFile>
+		<WaNoOutputFile>CONTCAR</WaNoOutputFile>
+	</WaNoOutputFiles>
+</WaNoTemplate>

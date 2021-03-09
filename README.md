@@ -1,5 +1,5 @@
 # DFT-VASP
-The DFT_VASP WaNo implements a wide range of methods available within the VASP code, one of the most widely used electronic structure programs. This WaNo affords experienced and inexperienced users to perform DFT calculations without requiring a deep understanding of VASP functionalities and specifications. The POSCAR file is the single mandatory file as the input of the WaNo. All the remaining VASP input files are automatically generated.
+The DFT-VASP WaNo implements a wide range of methods available within the VASP code, one of the most widely used electronic structure programs. This WaNo affords experienced and inexperienced users to perform DFT calculations without requiring a deep understanding of VASP functionalities and specifications. The POSCAR file is the single mandatory file as the input of the WaNo. All the remaining VASP input files are automatically generated.
 
 Figure 6 shows that this WaNo has the INCAR, KPOINTS, Analysis, and Files_Run tabs. The first one aims to define the INCAR file. This tab might be changed whenever the problem requires more input parameters, which is attained by adding the necessary flags in the XML file. The remaining tabs create the KPOINTS file, allows the user to perform DOS and Bader Charge Analysis, and the Files_Run controls the VASP compilation types (vasp_std, vasp_gam, and  vasp_ncl). It loads the POSCAR file and, as an option, may load INCAR, POTCAR, KPOINTS too. 
 
@@ -20,7 +20,7 @@ To get this WaNo up running on your available computational resources, make sure
 - **KPOINTS tab**: Here the user can define two types of KPOINTS, `Kpoints_length` and `Kpoints_Monkhorst`.
 - **Analysis tab**: Aimed to compute Bader charge analysis and DOS.
 - **Files_Run tab**: Mandatory loads the POSCAR file, and as an option can load INCAR, POTCAR, KPOINTS, and KORINGA files. The KORINGA file can be any file. In the case of this problem, it loads the Input_data.yml file.
-## 2. DFT_VASP Output
+## 2. DFT-VASP Output
 - OUTCAR    
     - This file must return the properties of the system.
 

@@ -16,12 +16,19 @@ To get this WaNo up running on your available computational resources, make sure
 3. Numpy, os, sys, re, yaml. 
 ```
 
+<<<<<<< HEAD
 ## 1. DFT-VASP files and Inputs
+=======
+## 1. DFT-VASP Inputs
+>>>>>>> 80657fe9c750ca53843e799c850550f03bbd6b61
 - **INCAR tab**: as an option, we can set all INCAR flags available within VASP. However, we expose only a few of them, which are essential for the problem. See the GUI of this WaNo. A brief description of each flag pops up when we rover the mouse over the inputs.
 - **KPOINTS tab**: Here the user can define two types of KPOINTS, `Kpoints_length` and `Kpoints_Monkhorst`.
 - **Analysis tab**: Aimed to compute Bader charge analysis and DOS.
 - **Files_Run tab**: Mandatory loads the POSCAR file, and as an option can load INCAR, POTCAR, KPOINTS, and KORINGA files. The KORINGA file can be any file. In the case of this problem, it loads the Input_data.yml file.
+<<<<<<< HEAD
 - All `.py` scripts may generate the INCAR, POTCAR, and KPOINTS files. 
+=======
+>>>>>>> 80657fe9c750ca53843e799c850550f03bbd6b61
 ## 2. DFT-VASP Output
 - OUTCAR    
     - This file must return the properties of the system.

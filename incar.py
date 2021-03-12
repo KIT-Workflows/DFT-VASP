@@ -29,7 +29,7 @@ def get_VASP_inputs(structure):
                         ## Integration over the Brillouin zone (BZ):
                         ISMEAR  = 0,             # Gaussian smearing scheme. Use 0 for insulators, as suggested by VASPWIKI
                         SIGMA   = 0.010,
-                        LREAL   = '.FALSE.',        # Should projections be done in real space? Let VASP decide
+                        LREAL   = 'Auto',        # Should projections be done in real space? Let VASP decide
                         
                         ## DOS calculation:
                         LORBIT  = 10,            # Calculate the DOS without providing the Wigner Seitz radius
@@ -104,37 +104,54 @@ def check_DOS(dict_Analysis, dict_INCAR):
     if "DOS" in dict_Analysis.keys() and dict_Analysis["DOS"] == True:  
         dict_INCAR["LORBIT"]  = dict_Analysis["dos_calculation"].get("LORBIT")
         dict_INCAR["NEDOS"]  = dict_Analysis["dos_calculation"].get("NEDOS")
+        dict_INCAR["LORBIT"]  = dict_Analysis["dos_calculation"].get("LORBIT")
+        dict_INCAR["NSW"]  = dict_Analysis["dos_calculation"].get("NSW")
+        #dict_INCAR["ISMEAR"]  = dict_Analysis["dos_calculation"].get("ISMEAR")
+        dict_INCAR["PREC"]  = dict_Analysis["dos_calculation"].get("PREC")
+    return dict_INCAR
+
+def check_Band_structure(dict_Analysis, dict_INCAR):
+    if "Band_Structure" in dict_Analysis.keys() and dict_Analysis["Band_Structure"] == True:  
+        dict_INCAR["IBRION"]  = dict_Analysis["band"].get("IBRION")
+        dict_INCAR["ICHARG"]  = dict_Analysis["band"].get("ICHARG")
+        dict_INCAR["LORBIT"]  = dict_Analysis["band"].get("LORBIT")
+        dict_INCAR["NSW"]  = dict_Analysis["band"].get("NSW")
+        dict_INCAR["PREC"]  = dict_Analysis["band"].get("PREC")
         
     return dict_INCAR
 
-structure = Structure.from_file("POSCAR")   
-dict_INCAR = get_VASP_inputs(structure)
+##############################################################################
+if os.path.isfile('INCAR'):
+    print("INCAR already loaded")
+    exit
+else:
+    structure = Structure.from_file("POSCAR")   
+    dict_INCAR = get_VASP_inputs(structure)
 
+    with open('rendered_wano.yml') as file:
+        wano_file = yaml.full_load(file)
 
-with open('rendered_wano.yml') as file:
-    wano_file = yaml.full_load(file)
+    # Reading the inputs for INCAR file
+    for var_key, var_value in wano_file["TABS"]["INCAR"].items():
+        if var_key in dict_INCAR.keys():
+            dict_INCAR[var_key] = var_value
+            print(var_key, var_value)
+        else:
+            dict_INCAR[var_key] = var_value
 
+    dict_Analysis = {}
 
-# Reading the inputs for INCAR file
-for var_key, var_value in wano_file["TABS"]["INCAR"].items():
-    if var_key in dict_INCAR.keys():
-        dict_INCAR[var_key] = var_value
-    else:
-        dict_INCAR[var_key] = var_value
+    for var_key, var_value in wano_file["TABS"]["Analysis"].items():
+        dict_Analysis[var_key] = var_value    
 
-dict_Analysis = {}
+    dict_INCAR = check_IVDW(dict_INCAR)
+    dict_INCAR = check_SOC(dict_INCAR)
 
-for var_key, var_value in wano_file["TABS"]["Analysis"].items():
-    dict_Analysis[var_key] = var_value    
+    # Analysis in INCAR file
+    dict_INCAR = check_Bader(dict_Analysis, dict_INCAR)
+    dict_INCAR = check_DOS(dict_Analysis, dict_INCAR)
+    dict_INCAR = check_Band_structure(dict_Analysis, dict_INCAR)
+    incar = Incar.from_dict(dict_INCAR)
 
-dict_INCAR = check_IVDW(dict_INCAR)
-dict_INCAR = check_SOC(dict_INCAR)
-
-# Analysis in INCAR file
-dict_INCAR = check_Bader(dict_Analysis, dict_INCAR)
-dict_INCAR = check_DOS(dict_Analysis, dict_INCAR)
-incar = Incar.from_dict(dict_INCAR)
-
-incar.write_file('INCAR')
-
-print("INCAR successfully created")
+    incar.write_file('INCAR')
+    print("INCAR successfully created")

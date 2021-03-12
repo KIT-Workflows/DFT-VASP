@@ -7,8 +7,9 @@
  		</Author>
 
 		<Description>
-			This WaNo performs the DFT calculation using Vasp code. In this WaNo, the 
-			POTCAR might be automatically generated after reading the POSCAR file.
+			This WaNo performs the DFT calculation using Vasp code. Here all 
+			the inputs files might be automatically generated or loaded after
+			reading the POSCAR file.
  		</Description>
 
  		<Keyword>DFT</Keyword>
@@ -24,7 +25,8 @@
 				<WaNoInt name="IBRION" description = "Determines how the ions are updated and moved">2</WaNoInt>
 				<WaNoInt name="ISIF" description= "Determines whether the stress tensor is calculated and which principal degrees-of-freedom are allowed to change in relaxation and molecular dynamics runs">3</WaNoInt>
 				<WaNoFloat name="POTIM" description = "Sets the time step (MD) or step width scaling (ionic relaxations).">0.25</WaNoFloat>
-
+				<WaNoString name="PREC" description = "Specifies the precision-mode">Normal</WaNoString>
+				<WaNoInt name="NCORE" description = "Determines the number of compute cores that work on an individual orbital">4</WaNoInt>
 
 				<WaNoDropDown name="GGA">
 					<Entry id="0" chosen="True">PE</Entry>
@@ -48,8 +50,8 @@
 						<Entry id="7">MBDSC</Entry>
 					</WaNoDropDown>
 				<WaNoBool name="SOC" description= "Spin-Orbit Coupling effects">False</WaNoBool>
-				<WaNoBool name="LWAVE" description= "Spin-Orbit Coupling effects">False</WaNoBool>
-				<WaNoBool name="LCHARGE" description= "Spin-Orbit Coupling effects">False</WaNoBool>				  
+				<WaNoBool name="LWAVE" description= "This file determines whether the wavefunctions are written to the WAVECAR file at the end of a run">False</WaNoBool>
+				<WaNoBool name="LCHARG" description= "This file determines whether the charge densities (files CHGCAR and CHG) are written">False</WaNoBool>				  
 			</WaNoGroup>
 
 			<WaNoGroup name="KPOINTS">
@@ -72,14 +74,18 @@
 		<WaNoGroup name="Analysis">
 			<WaNoBool name="DOS">False</WaNoBool>
 			<WaNoDictBox name="dos_calculation" visibility_condition="%s == True" visibility_var_path="TABS.Analysis.DOS">
-				<WaNoInt name="NEDOS" description="Specifies number of gridpoints on which the DOS is evaluated">101</WaNoInt>
+				<WaNoInt name="NEDOS" description="Specifies number of gridpoints on which the DOS is evaluated">6001</WaNoInt>
 				<WaNoInt name="LORBIT" description="Together with an appropriate RWIGS, determines whether the PROCAR or PROOUT files are written">10</WaNoInt>	
-				<WaNoInt name="NSW" description = "Non-SC calculation">-1</WaNoInt>
+				<WaNoInt name="NSW" description = "Non-SC calculation">0</WaNoInt>
 				<WaNoInt name="IBRION" description = "No inonic movement">-1</WaNoInt>
+				<!-- <WaNoInt name="ISMEAR" description = "Determines how the partial occupancies fnk are set for each orbital">-5</WaNoInt> !-->
 				<WaNoString name="PREC" description = "Specifies the precision-mode">Accurate</WaNoString>
 			</WaNoDictBox>
 
 			<WaNoBool name="Band_Structure">False</WaNoBool>
+  			<WaNoFile logical_filename="CHGCAR" visibility_condition="%s == True"
+			visibility_var_path="TABS.Analysis.Band_Structure" name="CHGCAR_file">load CHGCAR</WaNoFile>
+
 			<WaNoDictBox name="band" visibility_condition="%s == True" visibility_var_path="TABS.Analysis.Band_Structure">
 				<WaNoInt name="ICHARG" description="ICHARG determines how VASP constructs the initial charge density">11</WaNoInt>
 				<WaNoInt name="LORBIT" description="Together with an appropriate RWIGS, determines whether the PROCAR or PROOUT files are written">11</WaNoInt>
@@ -156,5 +162,6 @@
 	<WaNoOutputFiles>
 		<WaNoOutputFile>OUTCAR</WaNoOutputFile>
 		<WaNoOutputFile>CONTCAR</WaNoOutputFile>
+		<WaNoOutputFile>CHGCAR</WaNoOutputFile>
 	</WaNoOutputFiles>
 </WaNoTemplate>

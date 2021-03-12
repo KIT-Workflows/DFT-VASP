@@ -5,7 +5,7 @@ Figure 1 shows that this WaNo has the INCAR, KPOINTS, Analysis, and Files_Run ta
 
 ![Semantic description of image](parameters-DFT-VASP.png)
 
-**Fig 1** The DFT_VASP WaNo performs DFT calculation using Vasp code. In this WaNo, the POTCAR might be automatized after reading the POSCAR file. In the GUI, we can set the KPOINTS and INCAR files, but there is also the option to load the inputs file in the Files_Run tab.
+**Fig 1** The DFT-VASP WaNo performs DFT calculation using Vasp code. In this WaNo, the POTCAR might be automatized after reading the POSCAR file. In the GUI, we can set the KPOINTS and INCAR files, but there is also the option to load the inputs file in the Files_Run tab.
 
 ## 1. Python Setup
 To get this WaNo up running on your available computational resources, make sure to have the below libraries installed on Python 3.6 or newer.
@@ -16,19 +16,12 @@ To get this WaNo up running on your available computational resources, make sure
 3. Numpy, os, sys, re, yaml. 
 ```
 
-<<<<<<< HEAD
 ## 1. DFT-VASP files and Inputs
-=======
-## 1. DFT-VASP Inputs
->>>>>>> 80657fe9c750ca53843e799c850550f03bbd6b61
 - **INCAR tab**: as an option, we can set all INCAR flags available within VASP. However, we expose only a few of them, which are essential for the problem. See the GUI of this WaNo. A brief description of each flag pops up when we rover the mouse over the inputs.
 - **KPOINTS tab**: Here the user can define two types of KPOINTS, `Kpoints_length` and `Kpoints_Monkhorst`.
 - **Analysis tab**: Aimed to compute Bader charge analysis and DOS.
 - **Files_Run tab**: Mandatory loads the POSCAR file, and as an option can load INCAR, POTCAR, KPOINTS, and KORINGA files. The KORINGA file can be any file. In the case of this problem, it loads the Input_data.yml file.
-<<<<<<< HEAD
 - All `.py` scripts may generate the INCAR, POTCAR, and KPOINTS files. 
-=======
->>>>>>> 80657fe9c750ca53843e799c850550f03bbd6b61
 ## 2. DFT-VASP Output
 - OUTCAR    
     - This file must return the properties of the system.

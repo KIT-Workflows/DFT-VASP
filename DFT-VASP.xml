@@ -28,7 +28,7 @@
 				<WaNoString name="PREC" description = "Specifies the precision-mode">Normal</WaNoString>
 				<WaNoInt name="NCORE" description = "Determines the number of compute cores that work on an individual orbital">4</WaNoInt>
 
-				<WaNoDropDown name="GGA">
+				<WaNoDropDown name="GGA" description = "Functionals">
 					<Entry id="0" chosen="True">PE</Entry>
 						<Entry id="1">91</Entry>
 						<Entry id="2">PZ</Entry>
@@ -39,19 +39,31 @@
 						<Entry id="7">B5</Entry>
 					</WaNoDropDown>
 			
-					<WaNoDropDown name="IVDW">
+					<WaNoDropDown name="IVDW" description = "vdW corrections">
 						<Entry id="0" chosen="True">0</Entry>
 						<Entry id="1">D2</Entry>
 						<Entry id="2">D3</Entry>
 						<Entry id="3">D3BJ</Entry>
 						<Entry id="4">dDsC</Entry>
-						<Entry id="5">TS</Entry>
-						<Entry id="6">TSSCS</Entry>
+						<Entry id="5">TSSCS</Entry>
+						<Entry id="6">TSHP</Entry>
 						<Entry id="7">MBDSC</Entry>
 					</WaNoDropDown>
+				<WaNoBool name="MD">False</WaNoBool>
+					<WaNoDictBox name="CPMD" visibility_condition="%s == True" visibility_var_path="TABS.INCAR.MD">
+						<WaNoFloat name="TEBEG">300</WaNoFloat>
+						<WaNoFloat name="TEEND">300</WaNoFloat>
+						<WaNoInt name="NBLOCK">50</WaNoInt>
+					<WaNoDropDown name="Ensemble">
+						<Entry id="0" chosen="True">NVE</Entry>
+						<Entry id="1">NPT</Entry>
+					</WaNoDropDown>
+				</WaNoDictBox>
+
 				<WaNoBool name="SOC" description= "Spin-Orbit Coupling effects">False</WaNoBool>
 				<WaNoBool name="LWAVE" description= "This file determines whether the wavefunctions are written to the WAVECAR file at the end of a run">False</WaNoBool>
-				<WaNoBool name="LCHARG" description= "This file determines whether the charge densities (files CHGCAR and CHG) are written">False</WaNoBool>				  
+				<WaNoBool name="LCHARG" description= "This file determines whether the charge densities (files CHGCAR and CHG) are written">False</WaNoBool>
+			
 			</WaNoGroup>
 
 			<WaNoGroup name="KPOINTS">
@@ -138,7 +150,7 @@
 	conda activate
 	python gen_POTCAR.py
 	python incar.py 
-	python kpoints.py 
+	python kpoints.py
 
 	bash run_vasp.sh
 
@@ -156,7 +168,6 @@
 		<WaNoInputFile logical_filename="gen_POTCAR.py">gen_POTCAR.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="incar.py">incar.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="kpoints.py">kpoints.py</WaNoInputFile>	
-		<WaNoInputFile logical_filename="run_vasp.sh">run_vasp.sh</WaNoInputFile>
 	</WaNoInputFiles>
 	
 	<WaNoOutputFiles>

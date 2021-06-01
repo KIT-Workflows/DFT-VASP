@@ -39,7 +39,7 @@ def get_VASP_inputs(structure):
                         LCHARG  =  '.FALSE.',    # Write charge densities?
                         LWAVE   =  '.FALSE.',    # write out the wavefunctions?
                         LASPH   = '.TRUE.',      # non-spherical elements in the PAW method
-                        
+                        # NKRED = 8, 
                         ## Key for parallel mode calculation:
                         NCORE   = 4,
                         LPLANE  =   '.TRUE.'     # Plane distribution of FFT coefficients. Reduces communications in FFT.
@@ -59,9 +59,11 @@ def check_IVDW(dict_INCAR):
         var_value = int(12)
     elif var_value == "dDsC":
         var_value = int(4)
-    elif var_value == "TS":
-        var_value = int(20)
     elif var_value == "TSSCS":
+        var_value = int(20)
+        dict_INCAR["LSCSGRAD"] = ".TRUE."
+        dict_INCAR["LSCALER0"] = ".TRUE." 
+    elif var_value == "TSHP":
         var_value = int(21)
     elif var_value == "MBDSC":
         var_value = int(202)
@@ -86,6 +88,36 @@ def check_SOC(dict_INCAR):
         dict_INCAR["ISYM"] = 0
     
     del dict_INCAR["SOC"]
+    return dict_INCAR
+
+def check_MD(dict_INCAR):
+    if "MD" in dict_INCAR.keys() and dict_INCAR["MD"] == True:
+        dict_INCAR["ISYM"] = 0
+        dict_INCAR["IBRION"] = 0
+        dict_INCAR["ISMEAR"] = 0
+        dict_INCAR["ALGO"] = "Very Fast"
+        dict_INCAR["LWAVE"] = ".FALSE."
+        dict_INCAR["LCHARG"] = ".FALSE."
+
+        
+        if dict_INCAR["CPMD"]["Ensemble"] == "NVE":
+            dict_INCAR["MDALGO"] = 1
+            dict_INCAR["ANDERSEN_PROB"] = 0.0
+            dict_INCAR["ISIF"] = 2
+            dict_INCAR["SMASS"] = -3 # Nose-Hoover thermostat
+        else:
+            dict_INCAR["MDALGO"] = 2
+            dict_INCAR["ISIF"] = 2
+            dict_INCAR["SMASS"] = 0
+
+        dict_INCAR["SMASS"] = -3 # Nose Hoover thermostat
+        dict_INCAR["TEBEG"] = dict_INCAR["CPMD"]["TEBEG"] # Init temperature 
+        dict_INCAR["TEEND"] = dict_INCAR["CPMD"]["TEEND"] # End temperature
+        
+        print(dict_INCAR["CPMD"]["Ensemble"])
+
+        del dict_INCAR["MD"]
+        del dict_INCAR["CPMD"]
     return dict_INCAR
 
 def check_Bader(dict_Analysis, dict_INCAR):
@@ -120,38 +152,59 @@ def check_Band_structure(dict_Analysis, dict_INCAR):
         
     return dict_INCAR
 
-##############################################################################
-if os.path.isfile('INCAR'):
-    print("INCAR already loaded")
-    exit
-else:
-    structure = Structure.from_file("POSCAR")   
-    dict_INCAR = get_VASP_inputs(structure)
+if __name__ == '__main__':
 
     with open('rendered_wano.yml') as file:
         wano_file = yaml.full_load(file)
+##############################################################################
 
-    # Reading the inputs for INCAR file
-    for var_key, var_value in wano_file["TABS"]["INCAR"].items():
-        if var_key in dict_INCAR.keys():
-            dict_INCAR[var_key] = var_value
-            print(var_key, var_value)
-        else:
-            dict_INCAR[var_key] = var_value
+    # Create bash file
+    file_name = "run_vasp.sh"
+    with open(file_name, 'w') as f:
+        f.write('#!/bin/bash\n')
+        f.write('. /etc/profile.d/lmod.sh\n')
+        f.write('set -e\n')
 
-    dict_Analysis = {}
+        f.write('module purge\n')
+        f.write('module load vasp prun\n')
+        f.write('\n')
 
-    for var_key, var_value in wano_file["TABS"]["Analysis"].items():
-        dict_Analysis[var_key] = var_value    
+        if wano_file["TABS"]["INCAR"]["SOC"]:
+            f.write('prun vasp_ncl\n')
+        else: 
+            f.write('prun ' + wano_file["TABS"]["Files_Run"]["prun_vasp"])
 
-    dict_INCAR = check_IVDW(dict_INCAR)
-    dict_INCAR = check_SOC(dict_INCAR)
+    os.system("chmod +x " + file_name)
+  
+    if os.path.isfile('INCAR'):
+        print("INCAR already loaded")
+        exit
+    else:
+        structure = Structure.from_file("POSCAR")   
+        dict_INCAR = get_VASP_inputs(structure)
 
-    # Analysis in INCAR file
-    dict_INCAR = check_Bader(dict_Analysis, dict_INCAR)
-    dict_INCAR = check_DOS(dict_Analysis, dict_INCAR)
-    dict_INCAR = check_Band_structure(dict_Analysis, dict_INCAR)
-    incar = Incar.from_dict(dict_INCAR)
+        # Reading the inputs for INCAR file
+        for var_key, var_value in wano_file["TABS"]["INCAR"].items():
+            if var_key in dict_INCAR.keys():
+                dict_INCAR[var_key] = var_value
+                print(var_key, var_value)
+            else:
+                dict_INCAR[var_key] = var_value
 
-    incar.write_file('INCAR')
-    print("INCAR successfully created")
+        dict_Analysis = {}
+
+        for var_key, var_value in wano_file["TABS"]["Analysis"].items():
+            dict_Analysis[var_key] = var_value    
+
+        dict_INCAR = check_IVDW(dict_INCAR)
+        dict_INCAR = check_SOC(dict_INCAR)
+        dict_INCAR = check_MD(dict_INCAR)
+
+        # Analysis in INCAR file
+        dict_INCAR = check_Bader(dict_Analysis, dict_INCAR)
+        dict_INCAR = check_DOS(dict_Analysis, dict_INCAR)
+        dict_INCAR = check_Band_structure(dict_Analysis, dict_INCAR)
+        incar = Incar.from_dict(dict_INCAR)
+
+        incar.write_file('INCAR')
+        print("INCAR successfully created")

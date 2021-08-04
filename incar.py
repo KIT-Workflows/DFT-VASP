@@ -28,8 +28,9 @@ def get_VASP_inputs(structure):
                         POTIM   = 0.010,
                         ## Integration over the Brillouin zone (BZ):
                         ISMEAR  = 0,             # Gaussian smearing scheme. Use 0 for insulators, as suggested by VASPWIKI
-                        SIGMA   = 0.010,
-                        LREAL   = 'Auto',        # Should projections be done in real space? Let VASP decide
+                        SIGMA   = 0.10,
+                        # LREAL   = 'Auto',        # Should projections be done in real space? Let VASP decide
+                        # ALGO   = 'ALL',
                         
                         ## DOS calculation:
                         LORBIT  = 10,            # Calculate the DOS without providing the Wigner Seitz radius
@@ -49,7 +50,6 @@ def get_VASP_inputs(structure):
     return incar_dict
 
 def check_IVDW(dict_INCAR):
-
     var_value = dict_INCAR.get('IVDW')
     if var_value == "D2":
         var_value = int(10)
@@ -77,6 +77,39 @@ def check_IVDW(dict_INCAR):
     else:
         dict_INCAR['IVDW'] = var_value    
 
+    return dict_INCAR
+
+def check_vdw_functional(dict_INCAR):
+    var_value = dict_INCAR.get('GGA')
+    if var_value == "optPBE-vdw":
+        dict_INCAR['GGA'] = "OR"
+        dict_INCAR['LUSE_VDW'] = ".TRUE."
+        dict_INCAR['AGGAC'] = 0.0000
+        dict_INCAR['LASPH'] = ".TRUE."
+    elif var_value == "optB88-vdw":
+        dict_INCAR['GGA'] = "BO"
+        dict_INCAR['PARAM1'] = 0.1833333333
+        dict_INCAR['PARAM2'] = 0.2200000000
+        dict_INCAR['LUSE_VDW'] = ".TRUE."
+        dict_INCAR['AGGAC'] = 0.0000
+        dict_INCAR['LASPH'] = ".TRUE."
+    elif var_value == "optB86b-vdw":
+        dict_INCAR['GGA'] = "MK"
+        dict_INCAR['PARAM1'] = 0.1234 
+        dict_INCAR['PARAM2'] = 1.0000
+        dict_INCAR['LUSE_VDW'] = ".TRUE."
+        dict_INCAR['AGGAC'] = 0.0000
+        dict_INCAR['LASPH'] = ".TRUE."
+    elif var_value == "SCAN+rVV10":
+        dict_INCAR['METAGGA']  = "SCAN"
+        dict_INCAR['LUSE_VDW'] = ".TRUE."
+        dict_INCAR['BPARAM'] = 6.3     # default but can be overwritten by this tag
+        dict_INCAR['CPARAM'] = 0.0093  # default but can be overwritten by this tag
+        dict_INCAR['LASPH'] = ".TRUE."
+        del dict_INCAR["GGA"]
+    else:
+        dict_INCAR['GGA'] = var_value
+        dict_INCAR = check_IVDW(dict_INCAR)
     return dict_INCAR
 
 def check_SOC(dict_INCAR):
@@ -115,6 +148,9 @@ def check_MD(dict_INCAR):
         dict_INCAR["TEEND"] = dict_INCAR["CPMD"]["TEEND"] # End temperature
         
         print(dict_INCAR["CPMD"]["Ensemble"])
+        del dict_INCAR["MD"]
+        del dict_INCAR["CPMD"]
+    else:
 
         del dict_INCAR["MD"]
         del dict_INCAR["CPMD"]
@@ -196,7 +232,7 @@ if __name__ == '__main__':
         for var_key, var_value in wano_file["TABS"]["Analysis"].items():
             dict_Analysis[var_key] = var_value    
 
-        dict_INCAR = check_IVDW(dict_INCAR)
+        dict_INCAR = check_vdw_functional(dict_INCAR)
         dict_INCAR = check_SOC(dict_INCAR)
         dict_INCAR = check_MD(dict_INCAR)
 

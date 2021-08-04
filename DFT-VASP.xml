@@ -24,11 +24,25 @@
 				<WaNoInt name="NSW" description = "Sets the maximum number of ionic steps">100</WaNoInt>
 				<WaNoInt name="IBRION" description = "Determines how the ions are updated and moved">2</WaNoInt>
 				<WaNoInt name="ISIF" description= "Determines whether the stress tensor is calculated and which principal degrees-of-freedom are allowed to change in relaxation and molecular dynamics runs">3</WaNoInt>
+				
+				<WaNoDropDown name="LREAL" description = "Determines whether the projection operators are evaluated in real-space or in reciprocal space.">
+					<Entry id="0" chosen="True">AUTO</Entry>
+					<Entry id="1">.FALSE.</Entry>
+				</WaNoDropDown>
+
+				<WaNoDropDown name="ALGO" description = "The ALGO tag is a convenient option to specify the electronic minimisation algorithm (as of VASP.4.5) and/or to select the type of GW calculations.">
+					<Entry id="0" chosen="True">NORMAL</Entry>
+					<Entry id="1">ALL</Entry>
+					<Entry id="2">FAST</Entry>
+					<Entry id="3">VERYFAST</Entry>
+				</WaNoDropDown>
+
+				
 				<WaNoFloat name="POTIM" description = "Sets the time step (MD) or step width scaling (ionic relaxations).">0.25</WaNoFloat>
 				<WaNoString name="PREC" description = "Specifies the precision-mode">Normal</WaNoString>
 				<WaNoInt name="NCORE" description = "Determines the number of compute cores that work on an individual orbital">4</WaNoInt>
 
-				<WaNoDropDown name="GGA" description = "Functionals">
+				<WaNoDropDown name="GGA" description = "Functionals. vdw-DFT functionals are tested and available from VASP 5.3.1">
 					<Entry id="0" chosen="True">PE</Entry>
 						<Entry id="1">91</Entry>
 						<Entry id="2">PZ</Entry>
@@ -37,6 +51,10 @@
 						<Entry id="5">PS</Entry>
 						<Entry id="6">B3</Entry>
 						<Entry id="7">B5</Entry>
+						<Entry id="8">optPBE-vdw</Entry>
+						<Entry id="9">optB88-vdw</Entry>
+						<Entry id="10">optB86b-vdw</Entry>
+						<Entry id="11">SCAN+rVV10</Entry>
 					</WaNoDropDown>
 			
 					<WaNoDropDown name="IVDW" description = "vdW corrections">
@@ -168,6 +186,7 @@
 		<WaNoInputFile logical_filename="gen_POTCAR.py">gen_POTCAR.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="incar.py">incar.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="kpoints.py">kpoints.py</WaNoInputFile>	
+		<WaNoInputFile logical_filename="vdw_kernel.bindat">vdw_kernel.bindat</WaNoInputFile>	
 	</WaNoInputFiles>
 	
 	<WaNoOutputFiles>

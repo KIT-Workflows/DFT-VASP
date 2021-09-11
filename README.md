@@ -33,3 +33,5 @@ To get this WaNo up running on your available computational resources, make sure
 - Step 3. Drag the WaNo from the top left menu to the SimStack canvas as shown in **Fig 1**.
 - Step 4. A double click on the WaNo will allow you to make the setups in the Input parameters.
 - Step 5. Name your WaNo with `Ctrl+S`, and running it with `Ctrl+R` command.
+
+Cite the WaNo: [![DOI](https://zenodo.org/badge/341835878.svg)](https://zenodo.org/badge/latestdoi/341835878)

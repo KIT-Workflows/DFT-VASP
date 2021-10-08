@@ -2,7 +2,7 @@ import pymatgen
 from pymatgen.core.structure import Structure, Lattice
 from pymatgen.io.vasp import Incar, Poscar, Potcar, Kpoints
 from pymatgen.io.vasp.sets import MPRelaxSet
-import os, sys, re, yaml
+import os, yaml
 
 def get_VASP_inputs(structure):
     #poscar  = Poscar(structure)
@@ -22,7 +22,7 @@ def get_VASP_inputs(structure):
                         
                         ## Ionic relaxation:  
                         NSW     =   150,         # Maximum number of ionic steps
-                        EDIFFG  = -0.025,        # stop if all forces are smaller than |EDIFFG|
+                        EDIFFG  = -0.020,        # stop if all forces are smaller than |EDIFFG|
                         IBRION  = 2,         
                         ISIF    = 3,             # Controls the computation of stress tensor. 3 computes everything
                         POTIM   = 0.010,
@@ -208,7 +208,7 @@ if __name__ == '__main__':
         if wano_file["TABS"]["INCAR"]["SOC"]:
             f.write('prun vasp_ncl\n')
         else: 
-            f.write('prun ' + wano_file["TABS"]["Files_Run"]["prun_vasp"])
+            f.write('prun ' + wano_file["TABS"]["Files-Run"]["prun_vasp"])
 
     os.system("chmod +x " + file_name)
   
@@ -230,7 +230,10 @@ if __name__ == '__main__':
         dict_Analysis = {}
 
         for var_key, var_value in wano_file["TABS"]["Analysis"].items():
-            dict_Analysis[var_key] = var_value    
+            if var_key == 'ENCUT':
+                var_value = float(var_value)
+            
+            dict_Analysis[var_key] = var_value     
 
         dict_INCAR = check_vdw_functional(dict_INCAR)
         dict_INCAR = check_SOC(dict_INCAR)

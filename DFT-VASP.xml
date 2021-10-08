@@ -92,12 +92,6 @@
 				<WaNoBool name="Kpoints_Monkhorst">False</WaNoBool>	
 				<WaNoMatrixFloat rows="2" cols="3" col_header="N1; N2; N3" row_header="divisions; shift" name="Monkhorst" 
 				visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_Monkhorst">[[0,0,0], [0,0,0]]</WaNoMatrixFloat>
-				
-				<!--
-				<WaNoBool name="Kpoints_path">False</WaNoBool>
-				<WaNoInt name="n_pts" visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_path">20</WaNoInt>
-				<WaNoMatrixFloat rows="2" cols="4" col_header="x; y; z" row_header="P1;P2" name="symmetry-point" 
-				visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_path">[["var1",0,0,0], ["var2",0,0,0]]</WaNoMatrixFloat> !-->
 
 			</WaNoGroup>
 
@@ -133,7 +127,7 @@
 			</WaNoDictBox>
 		</WaNoGroup>
 
-		<WaNoGroup name="Files_Run">
+		<WaNoGroup name="Files-Run">
 
 			<WaNoDropDown name="prun_vasp">
 				<Entry id="0" chosen="True">vasp_std</Entry>
@@ -145,19 +139,30 @@
 
 			<WaNoBool name="Import INCAR">False</WaNoBool>
   			<WaNoFile logical_filename="INCAR" visibility_condition="%s == True"
-			visibility_var_path="TABS.Files_Run.Import INCAR" name="INCAR_file">/home/celso/Wanos_2020/Test1/VASP_test/INCAR</WaNoFile>
+			visibility_var_path="TABS.Files-Run.Import INCAR" name="INCAR_file">/home/celso/Wanos_2020/Test1/VASP_test/INCAR</WaNoFile>
 
 			<WaNoBool name="Import POTCAR">False</WaNoBool>
   			<WaNoFile logical_filename="POTCAR" visibility_condition="%s == True"
-			visibility_var_path="TABS.Files_Run.Import POTCAR" name="POTCAR_file">/home/celso/Wanos_2020/Test1/VASP_test/POTCAR</WaNoFile>
+			visibility_var_path="TABS.Files-Run.Import POTCAR" name="POTCAR_file">/home/celso/Wanos_2020/Test1/VASP_test/POTCAR</WaNoFile>
 
 			<WaNoBool name="Import KPOINTS">False</WaNoBool>
   			<WaNoFile logical_filename="KPOINTS" visibility_condition="%s == True"
-			visibility_var_path="TABS.Files_Run.Import KPOINTS" name="KPOINTS_file">/home/celso/Wanos_2020/Test1/VASP_test/KPOINTS</WaNoFile>  
+			visibility_var_path="TABS.Files-Run.Import KPOINTS" name="KPOINTS_file">/home/celso/Wanos_2020/Test1/VASP_test/KPOINTS</WaNoFile>  
 
 			<WaNoBool name="Import KORINGA">False</WaNoBool>
   			<WaNoFile logical_filename="KORINGA" visibility_condition="%s == True"
-			visibility_var_path="TABS.Files_Run.Import KORINGA" name="KORINGA_file">KORINGA path file</WaNoFile>
+			visibility_var_path="TABS.Files-Run.Import KORINGA" name="KORINGA_file">KORINGA path file</WaNoFile>
+		</WaNoGroup>
+
+		<WaNoGroup name="Properties">
+
+		<WaNoBool name="properties">False</WaNoBool>	
+		<WaNoMultipleOf visibility_condition="%s == True" visibility_var_path="TABS.Properties.properties" name="Var-properties">
+ 			<Element id="0">
+		 		<WaNoString name="var-name">x0</WaNoString>
+ 			</Element>
+ 	</WaNoMultipleOf>
+			
 		</WaNoGroup>
 
 		</WaNoTabs>
@@ -171,8 +176,9 @@
 	python kpoints.py
 
 	bash run_vasp.sh
+	python vasp_results.py
 
-	{% if wano["TABS"]["Files_Run"]["Import KORINGA"] %}
+	{% if wano["TABS"]["Files-Run"]["Import KORINGA"] %}
 		{{ "sed -i '1i ########################\' OUTCAR" }}
 		{{ "cat KORINGA OUTCAR > OUTCAR_temp" }}
 		{{ "mv OUTCAR_temp OUTCAR" }}
@@ -186,12 +192,15 @@
 		<WaNoInputFile logical_filename="gen_POTCAR.py">gen_POTCAR.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="incar.py">incar.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="kpoints.py">kpoints.py</WaNoInputFile>	
-		<WaNoInputFile logical_filename="vdw_kernel.bindat">vdw_kernel.bindat</WaNoInputFile>	
+		<WaNoInputFile logical_filename="vdw_kernel.bindat">vdw_kernel.bindat</WaNoInputFile>
+		<WaNoInputFile logical_filename="vasp_results.py">vasp_results.py</WaNoInputFile>	
 	</WaNoInputFiles>
 	
 	<WaNoOutputFiles>
 		<WaNoOutputFile>OUTCAR</WaNoOutputFile>
 		<WaNoOutputFile>CONTCAR</WaNoOutputFile>
 		<WaNoOutputFile>CHGCAR</WaNoOutputFile>
+		<WaNoOutputFile>POTCAR</WaNoOutputFile>
+		<WaNoOutputFile>results.yml</WaNoOutputFile>
 	</WaNoOutputFiles>
 </WaNoTemplate>

@@ -112,6 +112,21 @@ def check_vdw_functional(dict_INCAR):
         dict_INCAR = check_IVDW(dict_INCAR)
     return dict_INCAR
 
+def check_hybrid_functionals(dict_INCAR):
+    var_value = dict_INCAR.get('GGA')
+    if var_value == 'HSE03':
+        dict_INCAR['GGA'] = "PE"
+        dict_INCAR['LHFCALC'] = ".TRUE."
+        dict_INCAR['HFSCREEN'] = 0.3000
+    elif var_value == 'HSE06':
+        dict_INCAR['GGA'] = 'PE'
+        dict_INCAR['LHFCALC'] = '.TRUE.'
+        dict_INCAR['HFSCREEN'] = 0.2000
+    else:
+        dict_INCAR['GGA'] = var_value
+
+    return dict_INCAR
+
 def check_SOC(dict_INCAR):
     if "SOC" in dict_INCAR.keys() and dict_INCAR["SOC"] == True:
         dict_INCAR["LASPH"] = ".TRUE."
@@ -236,6 +251,7 @@ if __name__ == '__main__':
             dict_Analysis[var_key] = var_value     
 
         dict_INCAR = check_vdw_functional(dict_INCAR)
+        dict_INCAR = check_hybrid_functionals(dict_INCAR)
         dict_INCAR = check_SOC(dict_INCAR)
         dict_INCAR = check_MD(dict_INCAR)
 

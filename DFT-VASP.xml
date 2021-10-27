@@ -51,10 +51,12 @@
 						<Entry id="5">PS</Entry>
 						<Entry id="6">B3</Entry>
 						<Entry id="7">B5</Entry>
-						<Entry id="8">optPBE-vdw</Entry>
-						<Entry id="9">optB88-vdw</Entry>
-						<Entry id="10">optB86b-vdw</Entry>
-						<Entry id="11">SCAN+rVV10</Entry>
+						<Entry id="8">HSE03</Entry>
+						<Entry id="9">HSE06</Entry>
+						<Entry id="10">optPBE-vdw</Entry>
+						<Entry id="11">optB88-vdw</Entry>
+						<Entry id="12">optB86b-vdw</Entry>
+						<Entry id="13">SCAN+rVV10</Entry>
 					</WaNoDropDown>
 			
 					<WaNoDropDown name="IVDW" description = "vdW corrections">
@@ -157,12 +159,17 @@
 		<WaNoGroup name="Properties">
 
 		<WaNoBool name="properties">False</WaNoBool>	
+
 		<WaNoMultipleOf visibility_condition="%s == True" visibility_var_path="TABS.Properties.properties" name="Var-properties">
  			<Element id="0">
 		 		<WaNoString name="var-name">x0</WaNoString>
  			</Element>
- 	</WaNoMultipleOf>
-			
+ 		</WaNoMultipleOf>
+
+		<WaNoBool name="Import Inputs">False</WaNoBool>
+  			<WaNoFile logical_filename="Inputs.yml" visibility_condition="%s == True"
+			visibility_var_path="TABS.Properties.Import Inputs" name="inputs.yml">inputs.yml</WaNoFile>	
+
 		</WaNoGroup>
 
 		</WaNoTabs>
@@ -193,7 +200,8 @@
 		<WaNoInputFile logical_filename="incar.py">incar.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="kpoints.py">kpoints.py</WaNoInputFile>	
 		<WaNoInputFile logical_filename="vdw_kernel.bindat">vdw_kernel.bindat</WaNoInputFile>
-		<WaNoInputFile logical_filename="vasp_results.py">vasp_results.py</WaNoInputFile>	
+		<WaNoInputFile logical_filename="vasp_results.py">vasp_results.py</WaNoInputFile>
+		<WaNoInputFile logical_filename="report_template.body">report_template.body</WaNoInputFile>	
 	</WaNoInputFiles>
 	
 	<WaNoOutputFiles>
@@ -201,6 +209,6 @@
 		<WaNoOutputFile>CONTCAR</WaNoOutputFile>
 		<WaNoOutputFile>CHGCAR</WaNoOutputFile>
 		<WaNoOutputFile>POTCAR</WaNoOutputFile>
-		<WaNoOutputFile>results.yml</WaNoOutputFile>
+		<WaNoOutputFile>dft_vasp_dict.yml</WaNoOutputFile>
 	</WaNoOutputFiles>
 </WaNoTemplate>

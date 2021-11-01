@@ -1,7 +1,7 @@
-import pymatgen
-from pymatgen.core.structure import Structure, Lattice
+#import pymatgen
+from pymatgen.core import Structure, Lattice
 from pymatgen.io.vasp import Incar, Poscar, Potcar, Kpoints
-from pymatgen.io.vasp.sets import MPRelaxSet
+#from pymatgen.io.vasp.sets import MPRelaxSet
 import os, yaml
 
 def get_VASP_inputs(structure):

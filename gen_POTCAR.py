@@ -33,7 +33,7 @@ def gen_potcar(var_elements):
     for i in var_elements:
         if i == "Pb" or i == "Sb":
             pot_var = pot_var + var_path + i + "_d" + var_pot_GW + " "
-        elif i == "Cs" or i == "K" or i == "Rb" or i == "Na" or i == "Nb" or i == "Ba":
+        elif i == "Cs" or i == "K" or i == "Rb" or i == "Na" or i == "Nb" or i == "Ba" or i == "Mo":
             pot_var = pot_var + var_path + i + "_sv" + var_pot_GW + " "
         else:
             pot_var = pot_var + var_path + i + var_pot_GW + " "

@@ -1,0 +1,3 @@
+<h1> ExcitonPreProcessor </h1>
+
+The following calculations were enabled in the WaNO: <b> {{ output_dict["total_energy"] }} <b/> 

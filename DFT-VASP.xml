@@ -18,7 +18,7 @@
 	<WaNoRoot name="DFT-VASP">
 		<WaNoTabs name="TABS">
 			<WaNoGroup name="INCAR">
-				<WaNoFloat name="ENCUT" description = "The cutoff energy for the planewave basis set in eV">500.0</WaNoFloat>
+				<WaNoFloat name="ENCUT" force_disable = "False" description = "The cutoff energy for the planewave basis set in eV">500.0</WaNoFloat>
 				<WaNoFloat name="EDIFFG" description = "Defines the break condition for the ionic relaxation loop">-0.020</WaNoFloat>
 				<WaNoInt name="ISPIN" description = "Specifies spin polarization">2</WaNoInt>
 				<WaNoInt name="NSW" description = "Sets the maximum number of ionic steps">100</WaNoInt>
@@ -136,7 +136,9 @@
 				<Entry id="1">vasp_gam</Entry>
 				<Entry id="2">vasp_ncl</Entry>
 			</WaNoDropDown>
-			
+
+			<WaNoString name="Title" description = "Name of the structure">title</WaNoString>
+
 			<WaNoFile logical_filename="POSCAR"  name="POSCAR_file">/home/celso/Wanos_2020/Test1/VASP_test/POSCAR</WaNoFile>
 
 			<WaNoBool name="Import INCAR">False</WaNoBool>
@@ -162,13 +164,13 @@
 
 		<WaNoMultipleOf visibility_condition="%s == True" visibility_var_path="TABS.Properties.properties" name="Var-properties">
  			<Element id="0">
-		 		<WaNoString name="var-name">x0</WaNoString>
+		 		<WaNoString name="var-name">total_energy</WaNoString>
  			</Element>
  		</WaNoMultipleOf>
 
 		<WaNoBool name="Import Inputs">False</WaNoBool>
   			<WaNoFile logical_filename="Inputs.yml" visibility_condition="%s == True"
-			visibility_var_path="TABS.Properties.Import Inputs" name="inputs.yml">inputs.yml</WaNoFile>	
+			visibility_var_path="TABS.Properties.Import Inputs" name="inputs">inputs.yml</WaNoFile>	
 
 		</WaNoGroup>
 

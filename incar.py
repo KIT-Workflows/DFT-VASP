@@ -1,6 +1,10 @@
 #import pymatgen
 from pymatgen.core import Structure, Lattice
-from pymatgen.io.vasp import Incar, Poscar, Potcar, Kpoints
+from pymatgen.io.vasp import Incar, Poscar, Potcar, Kpoints 
+
+from ase import io
+from ase.io.vasp import read_vasp, write_vasp
+
 #from pymatgen.io.vasp.sets import MPRelaxSet
 import os, yaml
 
@@ -208,6 +212,10 @@ if __name__ == '__main__':
     with open('rendered_wano.yml') as file:
         wano_file = yaml.full_load(file)
 ##############################################################################
+
+    label_var = wano_file["TABS"]["Files-Run"]["Title"]
+    structure = io.read("POSCAR")
+    write_vasp('POSCAR', structure, direct=True, vasp5=True, label=label_var)
 
     # Create bash file
     file_name = "run_vasp.sh"

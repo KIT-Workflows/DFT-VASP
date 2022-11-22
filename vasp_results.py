@@ -1,6 +1,32 @@
 from ase.io.vasp import read_vasp_out
 import yaml
 
+def get_bandgap(location = "DOSCAR",tol = 1e-3):
+    doscar = open(location)
+    for i in range(6):
+        l=doscar.readline()
+    efermi = float(l.split()[3])
+    step1 = doscar.readline().split()[0]
+    step2 = doscar.readline().split()[0]
+    step_size = float(step2)-float(step1)
+    not_found = True
+    while not_found:
+        l = doscar.readline().split()
+        e = float(l.pop(0))
+        dens = 0
+        for i in range(int(len(l)/2)):
+            dens += float(l[i])
+        if e < efermi and dens > tol:
+            bot = e
+        elif e > efermi and dens > tol:
+            top = e
+            not_found = False
+    if top - bot < step_size*2:
+        return 0,0,0
+    else:
+        #return top - bot,bot-efermi,top-efermi
+        return top - bot,bot,top
+
 def get_string_in_file(file_name, string_to_search):
     """Search for the given string in file and return lines containing that string,
     along with line numbers"""
@@ -60,9 +86,9 @@ if __name__ == '__main__':
         var_prop = wano_file["TABS"]["Properties"]["Var-properties"]
         a_key = list(a_dict[0].keys())[0]
         values_of_key = [a_dict[a_key] for a_dict in a_dict]
-        
-        file_outfile = 'OUTCAR'
-        atoms = read_vasp_out(file_outfile)
+
+        file_outfile = "OUTCAR"
+        atoms = read_vasp_out("OUTCAR")
         results_dict= {}
 
         #find_line(file_outfile, "NKPTS =", 3)
@@ -70,31 +96,41 @@ if __name__ == '__main__':
         results_dict["ENCUT"] = wano_file["TABS"]["INCAR"]["ENCUT"]
 
         for var in values_of_key:
+            print(var)
             if var[0].isupper():
                 cmd_1 = call_find_by_key(wano_file, var) #wano_file["TABS"]["INCAR"][var]
                 results_dict[var] = cmd_1
             else:
                 if var == "cell_lengths_and_angles":
-                    cmd_1 = "atoms.get_" + var + "()"
-                    results_dict['a'] = float(eval(cmd_1)[0])
-                    results_dict['c'] = float(eval(cmd_1)[2])
+                    cmd_1 = "atoms.get_{}{}".format(var, "()")
+                    results_dict["a"] = float(eval(cmd_1)[0])
+                    results_dict["c"] = float(eval(cmd_1)[2])
                     print(eval(cmd_1)[0],eval(cmd_1)[2])
                 elif var == "label" or var == "title":
-                    print(var) 
-                    temp_var = (get_string_in_file("OUTCAR", "POSCAR")[1][1]).split()[2]
-                    results_dict[var] = temp_var
+                    with open('rendered_wano.yml') as file:
+                        wano_file = yaml.full_load(file)
+                        
+                    results_dict[var] = wano_file["TABS"]["Files-Run"]["Title"] 
+                    # temp_var = (get_string_in_file("OUTCAR", "POSCAR")[1][1]).split()[2]
+                    # results_dict[var] = temp_var
+                elif var == "gap" or var == "Gap":
+                    gap, vbm, cbm = get_bandgap()
+                    results_dict["gap"] = gap
+                    results_dict["vbm"] = vbm
+                    results_dict["cbm"] = cbm
                 else:
-                    cmd_1 = "atoms.get_" + var + "()"
+                    cmd_1 = "atoms.get_{}{}".format(var, "()")
                     results_dict[var] = eval(cmd_1)
+                    print(results_dict)
     else:
         results_dict = {}
     
     if import_inputs:
-        with open('Inputs.yml') as file:
+        with open("Inputs.yml") as file:
             input_file = yaml.full_load(file)
         results_dict.update(input_file)
 
-    with open("dft_vasp_dict.yml",'w') as out:
+    with open("vasp_results.yml",'w') as out:
         yaml.dump(results_dict, out,default_flow_style=False)
     
     with open("output_dict.yml",'w') as out:

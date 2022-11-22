@@ -30,8 +30,8 @@ TABS:
     KPOINTS_file: KPOINTS
     POSCAR_file: POSCAR
     POTCAR_file: POTCAR
-    Title: '1'
-    prun_vasp: vasp_gam
+    Title: title
+    prun_vasp: vasp_std
   INCAR:
     ALGO: NORMAL
     CPMD:
@@ -43,9 +43,9 @@ TABS:
     ENCUT: 500.0
     GGA: PE
     IBRION: 2
-    ISIF: 2
+    ISIF: 3
     ISPIN: 2
-    IVDW: D3BJ
+    IVDW: D3
     LCHARG: false
     LREAL: AUTO
     LWAVE: false
@@ -58,12 +58,11 @@ TABS:
   KPOINTS:
     Kpoints_Monkhorst: true
     Kpoints_length: false
-    Monkhorst: '[ [  1.0 , 1.0 , 1.0 ] , [  0.0 , 0.0 , 0.0 ] ] '
+    Monkhorst: '[ [  4.0 , 4.0 , 1.0 ] , [  0.0 , 0.0 , 0.0 ] ] '
     Rk_length: 20
   Properties:
     Import Inputs: false
     Var-properties:
     - var-name: total_energy
-    - var-name: label
-    inputs.yml: Inputs.yml
+    inputs: Inputs.yml
     properties: true

@@ -214,8 +214,9 @@ if __name__ == '__main__':
 ##############################################################################
 
     label_var = wano_file["TABS"]["Files-Run"]["Title"]
+    
     structure = io.read("POSCAR")
-    write_vasp('POSCAR', structure, direct=True, vasp5=True, label=label_var)
+    write_vasp('POSCAR', structure, label=None, direct=True, vasp5=True, long_format=True)
 
     # Create bash file
     file_name = "run_vasp.sh"

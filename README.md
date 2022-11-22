@@ -45,3 +45,11 @@ To get this WaNo up and running on your available computational resources, make 
 - Step 3. Drag the WaNo from the top left menu to the SimStack canvas as shown in **Fig 1**.
 - Step 4. A double click on the WaNo will allow you to make the setups in the Input parameters.
 - Step 5. Name your WaNo with `Ctrl+S`, and running it with `Ctrl+R` command.
+
+## License & copyright
+  Developer: Celso Ricardo C. Rêgo, 
+  Multiscale Materials Modelling and Virtual Design,
+  Institute of Nanotechnology, Karlsruhe Institute of Technology
+  https://www.int.kit.edu/wenzel.php
+
+Licensed under the [KIT License](LICENSE).

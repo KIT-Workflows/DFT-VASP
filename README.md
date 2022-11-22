@@ -1,5 +1,5 @@
 
-!["DFT-VASP WaNo logo"](https://raw.githubusercontent.com/KIT-Workflows/DFT-VASP/main/DFT-VASP.png raw=true)
+!["DFT-VASP WaNo logo"](https://raw.githubusercontent.com/KIT-Workflows/DFT-VASP/main/DFT-VASP.png, raw=true)
 
 When publishing results obtained with DFT-VASP WaNo, please consider citing it. [![DOI](https://zenodo.org/badge/341835878.svg)](https://zenodo.org/badge/latestdoi/341835878)
 

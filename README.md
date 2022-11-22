@@ -1,3 +1,6 @@
+
+!["DFT-VASP WaNo logo"](https://raw.githubusercontent.com/KIT-Workflows/DFT-VASP/main/DFT-VASP.png raw=true)
+
 When publishing results obtained with DFT-VASP WaNo, please consider citing it. [![DOI](https://zenodo.org/badge/341835878.svg)](https://zenodo.org/badge/latestdoi/341835878)
 
 # DFT-VASP
@@ -5,7 +8,6 @@ The DFT-VASP WaNo implements a wide range of methods available within the VASP c
 
 Figure 1 shows that this WaNo has the INCAR, KPOINTS, Analysis, and Files_Run tabs. The first one aims to define the INCAR file. This tab might be changed whenever the problem requires more input parameters, which is attained by adding the necessary flags in the XML file. The remaining tabs create the KPOINTS file, allows the user to perform DOS and Bader Charge Analysis, and the Files_Run controls the VASP compilation types (vasp_std, vasp_gam, and  vasp_ncl). It loads the POSCAR file and, as an option, may load INCAR, POTCAR, KPOINTS too. 
 
-![Semantic description of image](https://raw.githubusercontent.com/KIT-Workflows/DFT-VASP/main/DFT-VASP.png)
 
 **Fig 1** The DFT-VASP WaNo performs DFT calculation using Vasp code. In this WaNo, the POTCAR might be automatized after reading the POSCAR file. In the GUI, we can set the KPOINTS and INCAR files, but there is also the option to load the inputs file in the Files_Run tab.
 

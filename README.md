@@ -47,7 +47,7 @@ To get this WaNo up and running on your available computational resources, make 
 - Step 5. Name your WaNo with `Ctrl+S`, and running it with `Ctrl+R` command.
 
 ## Acknowledgements
-This project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No. 957189 (BIG-MAP). It is also part of BATTERY 2030+ initiative under grant agreement No. 957213.
+This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 957189. The project is part of BATTERY 2030+, the large-scale European research initiative for inventing the sustainable batteries of the future.
 
 ## License & copyright
   Developer: Celso Ricardo C. Rêgo, 

@@ -54,33 +54,12 @@ def get_VASP_inputs(structure):
     return incar_dict
 
 def check_IVDW(dict_INCAR):
-    var_value = dict_INCAR.get('IVDW')
-    if var_value == "D2":
-        var_value = int(10)
-    elif var_value == "D3":
-        var_value = int(11)
-    elif var_value == "D3BJ":
-        var_value = int(12)
-    elif var_value == "dDsC":
-        var_value = int(4)
-    elif var_value == "TSSCS":
-        var_value = int(20)
-        dict_INCAR["LSCSGRAD"] = ".TRUE."
-        dict_INCAR["LSCALER0"] = ".TRUE." 
-    elif var_value == "TSHP":
-        var_value = int(21)
-    elif var_value == "MBDSC":
-        var_value = int(202)
-    else:
-        var_value = int(0)
+    var_value = dict_INCAR.get("IVDW")
+    ivdw_data = {"D2": 10, "D3": 11, "D3BJ": 12, "dDsC": 4, "TSSCS": 20, "TSHP": 21, "MBDSC": 202, "MBDFI": 263, "None": 0}
+    dict_INCAR['IVDW'] = ivdw_data[var_value]
+    dict_INCAR['ADDGRID'] = '.FALSE.'
+    dict_INCAR['LASPH'] = '.FALSE.'
     
-    if var_value > 0:
-        dict_INCAR['IVDW'] = var_value
-        dict_INCAR['ADDGRID'] = '.FALSE.'
-        dict_INCAR['LASPH'] = '.FALSE.'
-    else:
-        dict_INCAR['IVDW'] = var_value    
-
     return dict_INCAR
 
 def check_vdw_functional(dict_INCAR):

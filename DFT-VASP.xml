@@ -60,7 +60,7 @@
 					</WaNoDropDown>
 			
 					<WaNoDropDown name="IVDW" description = "vdW corrections">
-						<Entry id="0" chosen="True">0</Entry>
+						<Entry id="0" chosen="True">None</Entry>
 						<Entry id="1">D2</Entry>
 						<Entry id="2">D3</Entry>
 						<Entry id="3">D3BJ</Entry>
@@ -68,6 +68,7 @@
 						<Entry id="5">TSSCS</Entry>
 						<Entry id="6">TSHP</Entry>
 						<Entry id="7">MBDSC</Entry>
+						<Entry id="8">MBDFI</Entry>
 					</WaNoDropDown>
 				<WaNoBool name="MD">False</WaNoBool>
 					<WaNoDictBox name="CPMD" visibility_condition="%s == True" visibility_var_path="TABS.INCAR.MD">

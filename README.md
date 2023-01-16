@@ -35,6 +35,8 @@ To get this WaNo up and running on your available computational resources, make 
     - The CONTCAR file contains information about the structure, e.g., the ionic positions.
 - `POTCAR`
     - The POTCAR file essentially contains the pseudopotential for each atomic species used in the calculation.
+- `CHGCAR`
+    - VASP stores the charge density and the PAW one-center occupancies in the CHGCAR file, which can also be used to restart calculations.
 - `vasp_results.yml`
     - This a dictionary file with some chosen information about the system. 
 

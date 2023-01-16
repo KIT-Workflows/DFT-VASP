@@ -26,7 +26,7 @@ To get this WaNo up and running on your available computational resources, make 
 - **Analysis tab**: Aimed to compute Bader charge analysis and DOS.
 - **Files-Run tab**: Mandatory loads the POSCAR file, and as an option can load INCAR, POTCAR, KPOINTS, and KORINGA files. The KORINGA file can be any file. In the case of this problem, it loads the Input_data.yml file.
 - **Properties tab**: This tab is optional but quite helpful to query properties from the OUTCAR file. Currently, any properties can be inquired using the get python functions in ASE (`get_total_energy, get_potential_energy, get_magnetic_moment`, and etc) or INCAR flags. In this tab, we must omit the term `get` and all the values of those properties or flags are saved in the dft_vasp_dict.yml dictionary file.
-- All `.py` scripts may generate the INCAR, POTCAR, and KPOINTS files. 
+- All `.py` scripts may generate the INCAR, POTCAR, and KPOINTS files (:warning: **If you are using mobile browser**: Be very careful here!). 
 
 ## 3. DFT-VASP Output
 - `OUTCAR`    

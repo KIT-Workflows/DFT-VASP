@@ -38,7 +38,7 @@ To get this WaNo up and running on your available computational resources, make 
 - `CHGCAR`
     - VASP stores the charge density and the PAW one-center occupancies in the CHGCAR file, which can also be used to restart calculations.
 - `vasp_results.yml`
-    - This a dictionary file with some chosen information about the system. 
+    - This database comprises all inputs in the `rendered_wano.yml` file as well a set of keys and values of the following properties: 'total_energy', 'potential_energy', 'initial_magnetic_moments',             'magnetic_moment', 'magnetic_moments' ,'kinetic_energy','cell', 'cell_lengths_and_angles', 'positions', 'forces', 'chemical_formula',                     'chemical_symbols', 'center_of_mass', 'volume', 'temperature', 'all_distances', 'masses', 'atomic_numbers', 'global_number_of_atoms',                     'initial_charges', 'band_gap', 'convergence', 'datetime', and 'user'.  
 
 ## 4. Running this Workflow
 

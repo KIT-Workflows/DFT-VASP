@@ -3,9 +3,7 @@
 When publishing results obtained with DFT-VASP WaNo, please consider citing it. [![DOI](https://zenodo.org/badge/341835878.svg)](https://zenodo.org/badge/latestdoi/341835878)
 
 # DFT-VASP
-The DFT-VASP WaNo is a user-friendly tool that enables the performance of Density Functional Theory calculations using the widely-used VASP code without the need for a thorough understanding of VASP's functionalities and specifications. It offers a variety of methods and only requires the POSCAR file as mandatory input, with all other VASP input files being generated or loaded automatically. The commonly generated outputs include the OUTCAR, CONTCAR, CHGCAR, and POTCAR files and a lightweight, human-readable database in the `yml` extension, named vasp_results, that contains key information about the simulation.
-
-
+The DFT-VASP WaNo is a user-friendly tool that enables the performance of Density Functional Theory calculations using the widely-used VASP code without the need for a thorough understanding of VASP's functionalities and specifications. It offers a variety of methods and only requires the `POSCAR` file as mandatory input, with all other VASP input files being generated or loaded automatically. The commonly generated outputs include the `OUTCAR`, `CONTCAR`, `CHGCAR`, and `POTCAR` files and a lightweight, human-readable database in the `yml` extension, named `vasp_results`, that contains key information about the simulation.
 
 Figure 1 shows that this WaNo has the INCAR, KPOINTS, Analysis, and Files-Run tabs. The first one aims to define the INCAR file. This tab might be changed whenever the problem requires more input parameters, which is attained by adding the necessary flags in the XML file. The remaining tabs create the KPOINTS file and allow the user to perform DOS and Bader Charge Analysis, and the Files-Run controls the VASP compilation types (vasp_std, vasp_gam, and  vasp_ncl). It loads the POSCAR file and, as an option, may load INCAR, POTCAR, and KPOINTS too. 
 

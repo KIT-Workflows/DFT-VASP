@@ -3,9 +3,7 @@
 When publishing results obtained with DFT-VASP WaNo, please consider citing it. [![DOI](https://zenodo.org/badge/341835878.svg)](https://zenodo.org/badge/latestdoi/341835878)
 
 # DFT-VASP
-The DFT-VASP WaNo implements a wide range of methods available within the VASP code, one of the most widely used electronic structure programs. This WaNo allows experienced and inexperienced users to perform DFT calculations without requiring a deep understanding of VASP functionalities and specifications. The POSCAR file is the single mandatory file as the input of the WaNo. All the remaining VASP input files are automatically generated or loaded from an external source.
-
-<a class="btn" href="https://example.com">Click me!</a>
+The DFT-VASP WaNo is a user-friendly tool that enables the performance of Density Functional Theory calculations using the widely-used VASP code without the need for a thorough understanding of VASP's functionalities and specifications. It offers a variety of methods and only requires the POSCAR file as mandatory input, with all other VASP input files being generated or loaded automatically. The commonly generated outputs include the OUTCAR, CONTCAR, CHGCAR, and POTCAR files and a lightweight, human-readable database in the `yml` extension, named vasp_results, that contains key information about the simulation.
 
 
 

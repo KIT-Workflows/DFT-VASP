@@ -40,7 +40,7 @@ To get this WaNo up and running on your available computational resources, make 
 - `vasp_results.yml`
     - This database comprises all inputs in the `rendered_wano.yml` file as well a set of keys and values of the following properties: _total_energy, potential_energy, initial_magnetic_moments, magnetic_moment, magnetic_moments, kinetic_energy, cell, cell_lengths_and_angles, positions, forces, chemical_formula, chemical_symbols, center_of_mass, volume, temperature, all_distances, masses, atomic_numbers, global_number_of_atoms, initial_charges, band_gap, convergence, datetime, and user_.  
 
-## 4. Running this Workflow
+## 4. Running this WaNo
 
 - Step 1. Move the DFT-VASP folder to the WaNo directory. 
 - Step 2. Open Simstack on your compute and connect to your remote resource.

@@ -188,7 +188,7 @@
 		python kpoints.py
 
 		bash run_vasp.sh
-		python vasp_results.py
+		python get_properties.py
 
 		{% if wano["TABS"]["Files-Run"]["Import KORINGA"] %}
 			{{ "sed -i '1i ########################\' OUTCAR" }}
@@ -204,7 +204,7 @@
 		<WaNoInputFile logical_filename="incar.py">incar.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="kpoints.py">kpoints.py</WaNoInputFile>	
 		<WaNoInputFile logical_filename="vdw_kernel.bindat">vdw_kernel.bindat</WaNoInputFile>
-		<WaNoInputFile logical_filename="vasp_results.py">vasp_results.py</WaNoInputFile>
+		<WaNoInputFile logical_filename="get_properties.py">get_properties.py</WaNoInputFile>
 		<WaNoInputFile logical_filename="report_template.body">report_template.body</WaNoInputFile>	
 	</WaNoInputFiles>
 	

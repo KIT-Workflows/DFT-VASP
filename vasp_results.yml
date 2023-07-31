@@ -1,0 +1,178 @@
+TABS:
+  Analysis:
+    Bader: false
+    Band_Structure: false
+    CHGCAR_file: CHGCAR
+    DOS: false
+    Mesh:
+      NGXF: 60
+      NGYF: 60
+      NGZF: 60
+    band:
+      IBRION: -1
+      ICHARG: 11
+      LORBIT: 11
+      NSW: 0
+      PREC: Accurate
+    dos_calculation:
+      IBRION: -1
+      LORBIT: 10
+      NEDOS: 6001
+      NSW: 0
+      PREC: Accurate
+  Files-Run:
+    INCAR_file: INCAR
+    Import INCAR: false
+    Import KORINGA: false
+    Import KPOINTS: false
+    Import POTCAR: false
+    KORINGA_file: KORINGA
+    KPOINTS_file: KPOINTS
+    POSCAR_file: POSCAR
+    POTCAR_file: POTCAR
+    Title: title
+    prun_vasp: vasp_std
+  INCAR:
+    ALGO: NORMAL
+    CPMD:
+      Ensemble: NVE
+      NBLOCK: 50
+      TEBEG: 300.0
+      TEEND: 300.0
+    EDIFFG: -0.02
+    ENCUT: 500.0
+    GGA: PE
+    IBRION: 2
+    ISIF: 3
+    ISPIN: 2
+    IVDW: D3
+    LCHARG: false
+    LREAL: AUTO
+    LWAVE: false
+    MD: false
+    NCORE: 4
+    NSW: 100
+    POTIM: 0.25
+    PREC: Normal
+    SOC: false
+  KPOINTS:
+    Kpoints_Monkhorst: true
+    Kpoints_length: false
+    Monkhorst: '[ [  4.0 , 4.0 , 1.0 ] , [  0.0 , 0.0 , 0.0 ] ] '
+    Rk_length: 20
+  Properties:
+    Import Inputs: false
+    Var-properties:
+    - var-name: total_energy
+    inputs: Inputs.yml
+    properties: true
+all_distances:
+- - 0.0
+  - 3.71131
+  - 1.42312
+  - 3.974804718750344
+- - 3.71131
+  - 0.0
+  - 3.974807221803342
+  - 1.4231130088998554
+- - 1.42312
+  - 3.974807221803342
+  - 0.0
+  - 3.974804718750344
+- - 3.974804718750344
+  - 1.4231130088998554
+  - 3.974804718750344
+  - 0.0
+atomic_numbers:
+- 6
+- 6
+- 6
+- 6
+band_gap: 1.1890000000000005
+cbm: 0.8108800700000005
+cell:
+- - 2.464908214
+  - 0.0
+  - -0.0
+- - -1.232454107
+  - 2.134673131
+  - -0.0
+- - 0.0
+  - 0.0
+  - 7.422610789
+cell_lengths_and_angles:
+- 2.464908214
+- 2.464908213722067
+- 7.422610789
+- 90.0
+- 90.0
+- 120.00000000372994
+center_of_mass:
+- 0.3081125
+- 0.53367
+- 3.711305
+chemical_formula: C4
+chemical_symbols:
+- C
+- C
+- C
+- C
+convergence: 'Yes'
+datetime: '2023-01-16 11:01:46'
+external_pressure: 1.22
+forces:
+- - -0.0
+  - 0.0
+  - -0.0
+- - -0.0
+  - -0.0
+  - 0.0
+- - -0.0
+  - -0.0
+  - 0.0
+- - 0.0
+  - 0.0
+  - 0.0
+global_number_of_atoms: 4
+initial_charges:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+initial_magnetic_moments:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+kinetic_energy: 0.0
+magnetic_moment: 1.0e-07
+magnetic_moments:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+masses:
+- 12.011
+- 12.011
+- 12.011
+- 12.011
+positions:
+- - 0.0
+  - 0.0
+  - 1.85565
+- - 0.0
+  - 0.0
+  - 5.56696
+- - -0.0
+  - 1.42312
+  - 1.85565
+- - 1.23245
+  - 0.71156
+  - 5.56696
+potential_energy: -36.93492832
+pullay_stress: 0.0
+temperature: 0.0
+total_energy: -36.93492832
+user: Your user name
+vbm: -0.37811993
+volume: 39.05609552421092

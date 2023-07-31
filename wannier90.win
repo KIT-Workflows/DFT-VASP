@@ -1,0 +1,34 @@
+Begin Projections
+random
+C:  s,p
+N:  s,p
+H:  s
+Pb: s,p,d
+I:  s,p
+End Projections
+
+spinors = true
+
+use_ws_distance=.false.
+
+num_iter = 1000
+
+kmesh_tol = 0.0001
+
+guiding_centres = true
+
+!postproc_setup = T
+
+!restart = plot
+
+write_hr = T
+
+bands_plot = T ! do a band structure calculation at the end
+
+begin kpoint_path ! along the following path
+Y 0.0 0.5 0.0 G 0.0 0.0 0.0
+G 0.0 0.0 0.0 X 0.5 0.0 0.0
+X 0.5 0.0 0.0 G 0.0 0.0 0.0
+G 0.0 0.0 0.0 Z 0.0 0.0 5.0
+end kpoint_path
+ num_wann =   396  ! set to NBANDS by VASP

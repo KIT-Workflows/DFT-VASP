@@ -34,7 +34,7 @@ class Vasp_properties:
         self.dict_properties = dict_properties 
 
     def check_conv_vasp(self):
-        
+
         '''
         Check if the convergency criteria was reached in the last iteration        
         '''
@@ -52,19 +52,18 @@ class Vasp_properties:
         if "reached required accuracy" in outcar_lines[-i-1]:
             
             print("VASP calculations successfully finished")
-            
+
             self.dict_properties["convergence"] = "Yes"
-            return self.dict_properties
-        
         else:
             
             print("VASP calculations not successfully finished")
             self.dict_properties["convergence"] = "No"
-            return self.dict_properties
+
+        return self.dict_properties
 
     def get_bandgap(self, location = "DOSCAR",tol = 1e-3):
         doscar = open(location)
-        for i in range(6):
+        for _ in range(6):
             l=doscar.readline()
         efermi = float(l.split()[3])
         step1 = doscar.readline().split()[0]
@@ -74,9 +73,7 @@ class Vasp_properties:
         while not_found:
             l = doscar.readline().split()
             e = float(l.pop(0))
-            dens = 0
-            for i in range(int(len(l)/2)):
-                dens += float(l[i])
+            dens = sum(float(l[i]) for i in range(len(l) // 2))
             if e < efermi and dens > tol:
                 bot = e
             elif e > efermi and dens > tol:
@@ -88,13 +85,13 @@ class Vasp_properties:
             self.dict_properties["vbm"] = 0.0
             self.dict_properties["cbm"] = 0.0
 
-            return self.dict_properties
         else:
             self.dict_properties["band_gap"] = top - bot
             self.dict_properties["vbm"] = bot-efermi
             self.dict_properties["cbm"] = top-efermi
-            
-            return self.dict_properties
+
+
+        return self.dict_properties
 
     def get_pressures(self):
 
@@ -109,89 +106,62 @@ class Vasp_properties:
         return self.dict_properties
 
     def get_vasp_properties(self):
-
         ''' Pressure and band gap aren't supported in ASE '''
-
         try:
             self.check_conv_vasp()
-
             self.get_pressures()
             self.get_bandgap()
-
-            
-            ''' Supported properties in ASE '''
-
-            atoms = read_vasp_out("OUTCAR") # read inside eval 
-            
-            a = "atoms.get_"
-            c = "()"
-
-            for var_prop in self.properties_bool:
-
-                if isinstance(eval("".join( [a, var_prop, c] )), np.ndarray) or isinstance(eval("".join( [a, var_prop, c] )), Cell):
-                    self.dict_properties[var_prop] = eval("".join( [a, var_prop, c] )).tolist()
-                elif isinstance(eval("".join( [a, var_prop, c] )), np.float64):
-                    self.dict_properties[var_prop] = eval("".join( [a, var_prop, c] ))
-                    self.dict_properties[var_prop] = float(self.dict_properties[var_prop])
-                else:
-                    self.dict_properties[var_prop] = eval("".join( [a, var_prop, c] ))
-        
         except IndexError:
-
             print("The calculation did not converge")
 
-            ''' Supported properties in ASE '''
+        ''' Supported properties in ASE '''
+        atoms = read_vasp_out("OUTCAR") # read inside eval 
+        a = "atoms.get_"
+        c = "()"
 
-            atoms = read_vasp_out("OUTCAR") # read inside eval 
-            
-            a = "atoms.get_"
-            c = "()"
+        for var_prop in self.properties_bool:
+            property_value = eval("".join([a, var_prop, c]))
 
-            for var_prop in self.properties_bool:
+            if isinstance(property_value, (np.ndarray, Cell)):
+                self.dict_properties[var_prop] = property_value.tolist()
+            elif isinstance(property_value, np.float64):
+                self.dict_properties[var_prop] = float(property_value)
+            else:
+                self.dict_properties[var_prop] = property_value
 
-                if isinstance(eval("".join( [a, var_prop, c] )), np.ndarray) or isinstance(eval("".join( [a, var_prop, c] )), Cell):
-                    self.dict_properties[var_prop] = eval("".join( [a, var_prop, c] )).tolist()
-                elif isinstance(eval("".join( [a, var_prop, c] )), np.float64):
-                    self.dict_properties[var_prop] = eval("".join( [a, var_prop, c] ))
-                    self.dict_properties[var_prop] = float(self.dict_properties[var_prop])
-                else:
-                    self.dict_properties[var_prop] = eval("".join( [a, var_prop, c] ))
-            
         return self.dict_properties
 
 
 if __name__ == '__main__':
 
-    results_dict = {}
-
-    ''' current_datetime '''
-
-    ut = Util_tricks()
-    ut.metadata(results_dict)
-
-
-    # ''' Supported properties in ASE '''
-
-    properties_bool = ['total_energy', 'potential_energy', 'initial_magnetic_moments', 'magnetic_moment', 
-            'magnetic_moments' ,'kinetic_energy','cell', 'cell_lengths_and_angles', 'positions', 'forces', 
-            'chemical_formula', 'chemical_symbols', 'center_of_mass', 'volume', 'temperature', 'all_distances', 
-            'masses', 'atomic_numbers', 'global_number_of_atoms', 'initial_charges']
-    
-    #properties_bool = ['volume']
-
-    properties_vasp = Vasp_properties(properties_bool, results_dict)
-    
-    results_dict = properties_vasp.get_vasp_properties()
-
-    # with open("vasp_results.yml","w") as out:
-    #     yaml.dump(results_dict, out, default_flow_style=False)
-
     with open('rendered_wano.yml') as file:
         wano_file = yaml.full_load(file)
 
-    # with open('vasp_results.yml') as file:
-    #     vasp_file = yaml.full_load(file)
+    results_dict = {}
 
+    if wano_file["TABS"]["Files-Run"]["vasp version"] == "5.4.4":
+        ''' current_datetime '''
+
+        ut = Util_tricks()
+        ut.metadata(results_dict)
+
+
+        ''' Supported properties in ASE '''
+
+        properties_bool = ['total_energy', 'potential_energy', 'kinetic_energy', 'cell',  
+                        'cell_lengths_and_angles', 'positions', 'forces', 
+                'chemical_formula', 'chemical_symbols', 'center_of_mass', 'volume', 'temperature', 'all_distances', 
+                'masses', 'atomic_numbers', 'global_number_of_atoms', 'initial_charges']
+
+        if wano_file['TABS']['INCAR']['ISPIN'] == 2:
+            properties_bool.extend(('magnetic_moment', 'magnetic_moments'))
+
+        properties_vasp = Vasp_properties(properties_bool, results_dict)
+
+        results_dict = properties_vasp.get_vasp_properties()
+
+
+    ''' Pressure and band gap aren't supported in ASE '''
     wano_file = {**wano_file, **results_dict}
 
     with open("vasp_results.yml", "w") as out:

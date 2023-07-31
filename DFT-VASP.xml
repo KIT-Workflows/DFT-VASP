@@ -22,6 +22,7 @@
 				<WaNoFloat name="EDIFFG" description = "Defines the break condition for the ionic relaxation loop">-0.020</WaNoFloat>
 				<WaNoInt name="ISPIN" description = "Specifies spin polarization">2</WaNoInt>
 				<WaNoInt name="NSW" description = "Sets the maximum number of ionic steps">100</WaNoInt>
+				<WaNoInt name="ISYM" description = "Determines the way VASP treats symmetry">1</WaNoInt>
 				<WaNoInt name="IBRION" description = "Determines how the ions are updated and moved">2</WaNoInt>
 				<WaNoInt name="ISIF" description= "Determines whether the stress tensor is calculated and which principal degrees-of-freedom are allowed to change in relaxation and molecular dynamics runs">3</WaNoInt>
 				
@@ -60,16 +61,19 @@
 					</WaNoDropDown>
 			
 					<WaNoDropDown name="IVDW" description = "vdW corrections">
-						<Entry id="0" chosen="True">None</Entry>
+						<Entry id="0">None</Entry>
 						<Entry id="1">D2</Entry>
 						<Entry id="2">D3</Entry>
-						<Entry id="3">D3BJ</Entry>
+						<Entry id="3" chosen="True">D3BJ</Entry>
 						<Entry id="4">dDsC</Entry>
 						<Entry id="5">TSSCS</Entry>
 						<Entry id="6">TSHP</Entry>
 						<Entry id="7">MBDSC</Entry>
 						<Entry id="8">MBDFI</Entry>
 					</WaNoDropDown>
+					
+					<WaNoFloat name="KSPACING" description = "The tag KSPACING determines the number of k points if the KPOINTS file is not present.">0.5</WaNoFloat>
+
 				<WaNoBool name="MD">False</WaNoBool>
 					<WaNoDictBox name="CPMD" visibility_condition="%s == True" visibility_var_path="TABS.INCAR.MD">
 						<WaNoFloat name="TEBEG">300</WaNoFloat>
@@ -92,9 +96,9 @@
 				<WaNoBool name="Kpoints_length">False</WaNoBool>
 				<WaNoInt name="Rk_length" visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_length">20</WaNoInt>
   				
-				<WaNoBool name="Kpoints_Monkhorst">True</WaNoBool>	
+				<WaNoBool name="Kpoints_Monkhorst">False</WaNoBool>	
 				<WaNoMatrixFloat rows="2" cols="3" col_header="N1; N2; N3" row_header="divisions; shift" name="Monkhorst" 
-				visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_Monkhorst">[[4,4,1], [0,0,0]]</WaNoMatrixFloat>
+				visibility_condition="%s == True" visibility_var_path="TABS.KPOINTS.Kpoints_Monkhorst">[[6,6,6], [0,0,0]]</WaNoMatrixFloat>
 
 			</WaNoGroup>
 
@@ -132,6 +136,12 @@
 
 		<WaNoGroup name="Files-Run">
 
+			<WaNoDropDown name="vasp version">
+				<Entry id="0" chosen="True">5.4.4</Entry>
+				<Entry id="1">6.2.0</Entry>
+				<Entry id="2">6.2.1</Entry>
+			</WaNoDropDown>
+
 			<WaNoDropDown name="prun_vasp">
 				<Entry id="0" chosen="True">vasp_std</Entry>
 				<Entry id="1">vasp_gam</Entry>
@@ -140,7 +150,7 @@
 
 			<WaNoString name="Title" description = "Name of the structure">title</WaNoString>
 
-			<WaNoFile logical_filename="POSCAR"  name="POSCAR_file">/home/celso/Wanos_2020/DFT-VASP/POSCAR</WaNoFile>
+			<WaNoFile logical_filename="POSCAR"  name="Import POSCAR">/home/celso/Wanos_2020/DFT-VASP/POSCAR</WaNoFile>
 
 			<WaNoBool name="Import INCAR">False</WaNoBool>
   			<WaNoFile logical_filename="INCAR" visibility_condition="%s == True"
@@ -153,50 +163,12 @@
 			<WaNoBool name="Import KPOINTS">False</WaNoBool>
   			<WaNoFile logical_filename="KPOINTS" visibility_condition="%s == True"
 			visibility_var_path="TABS.Files-Run.Import KPOINTS" name="KPOINTS_file">/home/celso/Wanos_2020/Test1/VASP_test/KPOINTS</WaNoFile>  
-
-			<WaNoBool name="Import KORINGA">False</WaNoBool>
-  			<WaNoFile logical_filename="KORINGA" visibility_condition="%s == True"
-			visibility_var_path="TABS.Files-Run.Import KORINGA" name="KORINGA_file">KORINGA path file</WaNoFile>
 		</WaNoGroup>
-
-		<WaNoGroup name="Properties">
-
-		<WaNoBool name="properties">False</WaNoBool>	
-
-		<WaNoMultipleOf visibility_condition="%s == True" visibility_var_path="TABS.Properties.properties" name="Var-properties">
- 			<Element id="0">
-		 		<WaNoString name="var-name">total_energy</WaNoString>
- 			</Element>
- 		</WaNoMultipleOf>
-
-		<WaNoBool name="Import Inputs">False</WaNoBool>
-  			<WaNoFile logical_filename="Inputs.yml" visibility_condition="%s == True"
-			visibility_var_path="TABS.Properties.Import Inputs" name="inputs">inputs.yml</WaNoFile>	
-
-		</WaNoGroup>
-
 		</WaNoTabs>
 	</WaNoRoot>
 	
 	<WaNoExecCommand>
-		export NANOVER=V4
-		source $NANOMATCH/$NANOVER/local_anaconda/bin/activate
-		conda activate simstack_kit
-
-		python gen_POTCAR.py
-		python incar.py 
-		python kpoints.py
-
-		bash run_vasp.sh
-		python get_properties.py
-
-		{% if wano["TABS"]["Files-Run"]["Import KORINGA"] %}
-			{{ "sed -i '1i ########################\' OUTCAR" }}
-			{{ "cat KORINGA OUTCAR > OUTCAR_temp" }}
-			{{ "mv OUTCAR_temp OUTCAR" }}
-		{% else %}
-
-		{% endif %}
+		bash config.sh
 	</WaNoExecCommand>
 	
 	<WaNoInputFiles>
@@ -205,7 +177,8 @@
 		<WaNoInputFile logical_filename="kpoints.py">kpoints.py</WaNoInputFile>	
 		<WaNoInputFile logical_filename="vdw_kernel.bindat">vdw_kernel.bindat</WaNoInputFile>
 		<WaNoInputFile logical_filename="get_properties.py">get_properties.py</WaNoInputFile>
-		<WaNoInputFile logical_filename="report_template.body">report_template.body</WaNoInputFile>	
+		<WaNoInputFile logical_filename="report_template.body">report_template.body</WaNoInputFile>
+		<WaNoInputFile logical_filename="config.sh">config.sh</WaNoInputFile>
 	</WaNoInputFiles>
 	
 	<WaNoOutputFiles>

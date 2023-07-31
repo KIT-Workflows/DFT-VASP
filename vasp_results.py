@@ -3,7 +3,7 @@ import yaml
 
 def get_bandgap(location = "DOSCAR",tol = 1e-3):
     doscar = open(location)
-    for i in range(6):
+    for _ in range(6):
         l=doscar.readline()
     efermi = float(l.split()[3])
     step1 = doscar.readline().split()[0]
@@ -13,19 +13,13 @@ def get_bandgap(location = "DOSCAR",tol = 1e-3):
     while not_found:
         l = doscar.readline().split()
         e = float(l.pop(0))
-        dens = 0
-        for i in range(int(len(l)/2)):
-            dens += float(l[i])
+        dens = sum(float(l[i]) for i in range(len(l) // 2))
         if e < efermi and dens > tol:
             bot = e
         elif e > efermi and dens > tol:
             top = e
             not_found = False
-    if top - bot < step_size*2:
-        return 0,0,0
-    else:
-        #return top - bot,bot-efermi,top-efermi
-        return top - bot,bot,top
+    return (0, 0, 0) if top - bot < step_size*2 else (top - bot, bot, top)
 
 def get_string_in_file(file_name, string_to_search):
     """Search for the given string in file and return lines containing that string,
@@ -80,7 +74,9 @@ if __name__ == '__main__':
 
     properties_bool = wano_file["TABS"]["Properties"]["properties"]
     import_inputs = wano_file["TABS"]["Properties"]["Import Inputs"]
-    
+
+    results_dict= {}
+
     if properties_bool:
         a_dict = wano_file["TABS"]["Properties"]["Var-properties"]
         var_prop = wano_file["TABS"]["Properties"]["Var-properties"]
@@ -89,8 +85,6 @@ if __name__ == '__main__':
 
         file_outfile = "OUTCAR"
         atoms = read_vasp_out("OUTCAR")
-        results_dict= {}
-
         #find_line(file_outfile, "NKPTS =", 3)
         results_dict["NKPTS"] = int(find_line(file_outfile, "NKPTS =", 3))
         results_dict["ENCUT"] = wano_file["TABS"]["INCAR"]["ENCUT"]
@@ -100,31 +94,27 @@ if __name__ == '__main__':
             if var[0].isupper():
                 cmd_1 = call_find_by_key(wano_file, var) #wano_file["TABS"]["INCAR"][var]
                 results_dict[var] = cmd_1
+            elif var == "cell_lengths_and_angles":
+                cmd_1 = f"atoms.get_{var}()"
+                results_dict["a"] = float(eval(cmd_1)[0])
+                results_dict["c"] = float(eval(cmd_1)[2])
+                print(eval(cmd_1)[0],eval(cmd_1)[2])
+            elif var in ["label", "title"]:
+                with open('rendered_wano.yml') as file:
+                    wano_file = yaml.full_load(file)
+
+                results_dict[var] = wano_file["TABS"]["Files-Run"]["Title"] 
+                # temp_var = (get_string_in_file("OUTCAR", "POSCAR")[1][1]).split()[2]
+                # results_dict[var] = temp_var
+            elif var in ["gap", "Gap"]:
+                gap, vbm, cbm = get_bandgap()
+                results_dict["gap"] = gap
+                results_dict["vbm"] = vbm
+                results_dict["cbm"] = cbm
             else:
-                if var == "cell_lengths_and_angles":
-                    cmd_1 = "atoms.get_{}{}".format(var, "()")
-                    results_dict["a"] = float(eval(cmd_1)[0])
-                    results_dict["c"] = float(eval(cmd_1)[2])
-                    print(eval(cmd_1)[0],eval(cmd_1)[2])
-                elif var == "label" or var == "title":
-                    with open('rendered_wano.yml') as file:
-                        wano_file = yaml.full_load(file)
-                        
-                    results_dict[var] = wano_file["TABS"]["Files-Run"]["Title"] 
-                    # temp_var = (get_string_in_file("OUTCAR", "POSCAR")[1][1]).split()[2]
-                    # results_dict[var] = temp_var
-                elif var == "gap" or var == "Gap":
-                    gap, vbm, cbm = get_bandgap()
-                    results_dict["gap"] = gap
-                    results_dict["vbm"] = vbm
-                    results_dict["cbm"] = cbm
-                else:
-                    cmd_1 = "atoms.get_{}{}".format(var, "()")
-                    results_dict[var] = eval(cmd_1)
-                    print(results_dict)
-    else:
-        results_dict = {}
-    
+                cmd_1 = f"atoms.get_{var}()"
+                results_dict[var] = eval(cmd_1)
+                print(results_dict)
     if import_inputs:
         with open("Inputs.yml") as file:
             input_file = yaml.full_load(file)
@@ -132,7 +122,7 @@ if __name__ == '__main__':
 
     with open("vasp_results.yml",'w') as out:
         yaml.dump(results_dict, out,default_flow_style=False)
-    
+
     with open("output_dict.yml",'w') as out:
         yaml.dump(results_dict, out,default_flow_style=False)
     

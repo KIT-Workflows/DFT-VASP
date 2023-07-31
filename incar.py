@@ -9,49 +9,43 @@ from ase.io.vasp import read_vasp, write_vasp
 import os, yaml
 
 def get_VASP_inputs(structure):
-    #poscar  = Poscar(structure)
-    incar_dict = dict(  SYSTEM  =   structure.formula, # Name of the system
-                        ## Electronic relaxation:
-                        ENCUT   =   500.,        # 500. eV, value for carbon atom
-                        NELMIN  = 6,             # Minimum number of eletronic selfconsistency (SC) steps
-                        NELM    = 1000,           # Maximum number of electronic SC steps
-                        NELMDL  = -12,           # Number of NON-selfconsistency steps
-                        EDIFF   = 1.0E-6,        # Global-break condition for the electronic SC-loop (ELM)
-
-                        ## Calculation mode:
-                        PREC    = 'NORMAL',      # Calcululation level (Changes FFT-grids)
-                        ISPIN   = 2,             # spin-polarized calculations
-                        ADDGRID = '.TRUE.',      # level of precision
-                        IVDW = 0,                # no vdW corrections
-                        
-                        ## Ionic relaxation:  
-                        NSW     =   150,         # Maximum number of ionic steps
-                        EDIFFG  = -0.020,        # stop if all forces are smaller than |EDIFFG|
-                        IBRION  = 2,         
-                        ISIF    = 3,             # Controls the computation of stress tensor. 3 computes everything
-                        POTIM   = 0.010,
-                        ## Integration over the Brillouin zone (BZ):
-                        ISMEAR  = 0,             # Gaussian smearing scheme. Use 0 for insulators, as suggested by VASPWIKI
-                        SIGMA   = 0.10,
-                        # LREAL   = 'Auto',        # Should projections be done in real space? Let VASP decide
-                        # ALGO   = 'ALL',
-                        
-                        ## DOS calculation:
-                        LORBIT  = 10,            # Calculate the DOS without providing the Wigner Seitz radius
-                        NEDOS   =  101,          # Number of points to calculate the DOS
-                        ## OUTCAR size:
-                        NWRITE  = 1,             # Determines how much information will be written in OUTCAR
-                        LCHARG  =  '.FALSE.',    # Write charge densities?
-                        LWAVE   =  '.FALSE.',    # write out the wavefunctions?
-                        LASPH   = '.TRUE.',      # non-spherical elements in the PAW method
-                        # NKRED = 8, 
-                        ## Key for parallel mode calculation:
-                        NCORE   = 4,
-                        LPLANE  =   '.TRUE.'     # Plane distribution of FFT coefficients. Reduces communications in FFT.
-                     )  
-    #incar   = Incar.from_dict(incar_dict )
-    #incar.write_file('INCAR')
-    return incar_dict
+    return dict(
+        SYSTEM=structure.formula,  # Name of the system
+        ## Electronic relaxation:
+        ENCUT=500.0,  # 500. eV, value for carbon atom
+        NELMIN=6,  # Minimum number of eletronic selfconsistency (SC) steps
+        NELM=1000,  # Maximum number of electronic SC steps
+        NELMDL=-12,  # Number of NON-selfconsistency steps
+        EDIFF=1.0e-6,  # Global-break condition for the electronic SC-loop (ELM)
+        ## Calculation mode:
+        PREC='NORMAL',  # Calcululation level (Changes FFT-grids)
+        ISPIN=2,  # spin-polarized calculations
+        ADDGRID='.TRUE.',  # level of precision
+        IVDW=0,  # no vdW corrections
+        ## Ionic relaxation:
+        NSW=150,  # Maximum number of ionic steps
+        EDIFFG=-0.020,  # stop if all forces are smaller than |EDIFFG|
+        IBRION=2,
+        ISIF=3,  # Controls the computation of stress tensor. 3 computes everything
+        POTIM=0.010,
+        ## Integration over the Brillouin zone (BZ):
+        ISMEAR=0,  # Gaussian smearing scheme. Use 0 for insulators, as suggested by VASPWIKI
+        SIGMA=0.10,
+        # LREAL   = 'Auto',        # Should projections be done in real space? Let VASP decide
+        # ALGO   = 'ALL',
+        ## DOS calculation:
+        LORBIT=10,  # Calculate the DOS without providing the Wigner Seitz radius
+        NEDOS=101,  # Number of points to calculate the DOS
+        ## OUTCAR size:
+        NWRITE=1,  # Determines how much information will be written in OUTCAR
+        LCHARG='.FALSE.',  # Write charge densities?
+        LWAVE='.FALSE.',  # write out the wavefunctions?
+        LASPH='.TRUE.',  # non-spherical elements in the PAW method
+        # NKRED = 8,
+        ## Key for parallel mode calculation:
+        NCORE=4,
+        LPLANE='.TRUE.',  # Plane distribution of FFT coefficients. Reduces communications in FFT.
+    )
 
 def check_IVDW(dict_INCAR):
     var_value = dict_INCAR.get("IVDW")
@@ -98,17 +92,20 @@ def check_vdw_functional(dict_INCAR):
 def check_hybrid_functionals(dict_INCAR):
     var_value = dict_INCAR.get('GGA')
     if var_value == 'HSE03':
-        dict_INCAR['GGA'] = "PE"
-        dict_INCAR['LHFCALC'] = ".TRUE."
-        dict_INCAR['HFSCREEN'] = 0.3000
+        _extracted_from_check_hybrid_functionals_4("PE", dict_INCAR, ".TRUE.", 0.3000)
     elif var_value == 'HSE06':
-        dict_INCAR['GGA'] = 'PE'
-        dict_INCAR['LHFCALC'] = '.TRUE.'
-        dict_INCAR['HFSCREEN'] = 0.2000
+        _extracted_from_check_hybrid_functionals_4('PE', dict_INCAR, '.TRUE.', 0.2000)
     else:
         dict_INCAR['GGA'] = var_value
 
     return dict_INCAR
+
+
+# TODO Rename this here and in `check_hybrid_functionals`
+def _extracted_from_check_hybrid_functionals_4(arg0, dict_INCAR, arg2, arg3):
+    dict_INCAR['GGA'] = arg0
+    dict_INCAR['LHFCALC'] = arg2
+    dict_INCAR['HFSCREEN'] = arg3
 
 def check_SOC(dict_INCAR):
     if "SOC" in dict_INCAR.keys() and dict_INCAR["SOC"] == True:
@@ -130,7 +127,6 @@ def check_MD(dict_INCAR):
         dict_INCAR["LWAVE"] = ".FALSE."
         dict_INCAR["LCHARG"] = ".FALSE."
 
-        
         if dict_INCAR["CPMD"]["Ensemble"] == "NVE":
             dict_INCAR["MDALGO"] = 1
             dict_INCAR["ANDERSEN_PROB"] = 0.0
@@ -144,14 +140,10 @@ def check_MD(dict_INCAR):
         dict_INCAR["SMASS"] = -3 # Nose Hoover thermostat
         dict_INCAR["TEBEG"] = dict_INCAR["CPMD"]["TEBEG"] # Init temperature 
         dict_INCAR["TEEND"] = dict_INCAR["CPMD"]["TEEND"] # End temperature
-        
-        print(dict_INCAR["CPMD"]["Ensemble"])
-        del dict_INCAR["MD"]
-        del dict_INCAR["CPMD"]
-    else:
 
-        del dict_INCAR["MD"]
-        del dict_INCAR["CPMD"]
+        print(dict_INCAR["CPMD"]["Ensemble"])
+    del dict_INCAR["MD"]
+    del dict_INCAR["CPMD"]
     return dict_INCAR
 
 def check_Bader(dict_Analysis, dict_INCAR):
@@ -193,7 +185,7 @@ if __name__ == '__main__':
 ##############################################################################
 
     label_var = wano_file["TABS"]["Files-Run"]["Title"]
-    
+
     structure = io.read("POSCAR")
     write_vasp('POSCAR', structure, label=None, direct=True, vasp5=True, long_format=True)
 
@@ -205,7 +197,9 @@ if __name__ == '__main__':
         f.write('set -e\n')
 
         f.write('module purge\n')
-        f.write('module load vasp prun\n')
+        vasp_v = wano_file["TABS"]["Files-Run"]["vasp version"]
+        f.write(f'module load vasp/{vasp_v} prun\n')
+        
         f.write('\n')
 
         if wano_file["TABS"]["INCAR"]["SOC"]:
@@ -213,8 +207,8 @@ if __name__ == '__main__':
         else: 
             f.write('prun ' + wano_file["TABS"]["Files-Run"]["prun_vasp"])
 
-    os.system("chmod +x " + file_name)
-  
+    os.system(f"chmod +x {file_name}")
+
     if os.path.isfile('INCAR'):
         print("INCAR already loaded")
         exit
@@ -235,7 +229,7 @@ if __name__ == '__main__':
         for var_key, var_value in wano_file["TABS"]["Analysis"].items():
             if var_key == 'ENCUT':
                 var_value = float(var_value)
-            
+
             dict_Analysis[var_key] = var_value     
 
         dict_INCAR = check_vdw_functional(dict_INCAR)

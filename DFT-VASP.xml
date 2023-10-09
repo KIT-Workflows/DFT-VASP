@@ -177,7 +177,6 @@
 		<WaNoInputFile logical_filename="kpoints.py">kpoints.py</WaNoInputFile>	
 		<WaNoInputFile logical_filename="vdw_kernel.bindat">vdw_kernel.bindat</WaNoInputFile>
 		<WaNoInputFile logical_filename="get_properties.py">get_properties.py</WaNoInputFile>
-		<WaNoInputFile logical_filename="report_template.body">report_template.body</WaNoInputFile>
 		<WaNoInputFile logical_filename="config.sh">config.sh</WaNoInputFile>
 	</WaNoInputFiles>
 	

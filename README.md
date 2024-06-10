@@ -5,14 +5,14 @@ When publishing results obtained with DFT-VASP **WaNo**, please consider citing 
 # DFT-VASP
 The DFT-VASP WaNo is a user-friendly tool that enables the performance of Density Functional Theory calculations using the widely-used VASP code without the need for a thorough understanding of VASP's functionalities and specifications. It offers a variety of methods and only requires the `POSCAR` file as mandatory input, with all other VASP input files being generated or loaded automatically. The commonly generated outputs include the `OUTCAR`, `CONTCAR`, `CHGCAR`, and `POTCAR` files and a lightweight, human-readable database in the `yml` extension, named `vasp_results`, that contains key information about the simulation.
 
-Figure 1 illustrates the layout of the DFT-VASP WaNo, which features the `INCAR`, `KPOINTS`, Analysis, and Files-Run tabs. The `INCAR` tab allows the user to define the input parameters for the `INCAR` file and can be easily modified to accommodate additional input parameters by adding the necessary flags in the XML file. The remaining tabs, `KPOINTS`, Analysis, and Files-Run, enable the creation of the `KPOINTS` file and provide tools for performing DOS and Bader Charge Analysis, respectively. The Files-Run tab also controls the VASP compilation types (vasp_std, vasp_gam, and vasp_ncl) and allows the user to load the POSCAR file as an option, the `INCAR`, `POTCAR`, and `KPOINTS` files too. 
+Figure 1 illustrates the layout of the DFT-VASP WaNo, which features the `INCAR`, `KPOINTS`, Analysis, and Files-Run tabs. The `INCAR` tab allows the user to define the input parameters for the `INCAR` file. It can be easily modified to accommodate additional input parameters by adding the necessary flags in the XML file. The remaining tabs, `KPOINTS`, Analysis, and Files-Run, enable the creation of the `KPOINTS` file and provide tools for performing DOS and Bader Charge Analysis, respectively. The Files-Run tab also controls the VASP compilation types (vasp_std, vasp_gam, and vasp_ncl) and allows the user to load the POSCAR file as an option, the `INCAR`, `POTCAR`, and `KPOINTS` files too. 
 
 ![DFT-VASP WaNo GUI](https://raw.githubusercontent.com/KIT-Workflows/DFT-VASP/main/DFT-VASP_paramters.png)
 
-**Fig 1** The DFT-VASP WaNo enables the performance of Density Functional Theory (DFT) calculations using the VASP code. It features an automated process for generating the `POTCAR` file after reading the `POSCAR` file. The user interface allows setting the `KPOINTS` and `INCAR` files and allows loading these input files in the Files-Run tab.
+**Fig 1** The DFT-VASP WaNo enables the performance of Density Functional Theory (DFT) calculations using the VASP code. It features an automated process for generating the `POTCAR` file after reading the `POSCAR` file. The user interface allows setting the `KPOINTS` and `INCAR` files and loading these input files in the Files-Run tab.
 
 ## 1. Python Setup
-To get this WaNo up and running on your available computational resources, make sure to have the below libraries installed on Python 3.6 or newer.
+To get this WaNo up and running on your available computational resources, have the below libraries installed on Python 3.6 or newer.
 
 ```
 1. Atomic Simulation Environment (ASE).
@@ -43,15 +43,15 @@ To get this WaNo up and running on your available computational resources, make 
 ## 4. Running this WaNo
 
 - Step 1. Move the DFT-VASP folder to the WaNo directory. 
-- Step 2. Open Simstack on your compute and connect to your remote resource.
+- Step 2. You can open Simstack on your computer and connect to your remote resource.
 - Step 3. Drag the WaNo from the top left menu to the SimStack canvas as shown in **Fig 1**.
 - Step 4. A double click on the WaNo will allow you to make the setups in the Input parameters.
-- Step 5. Name your WaNo with `Ctrl+S`, and running it with `Ctrl+R` command.
+- Step 5. Name your WaNo with `Ctrl+S`, and run it with the `Ctrl+R` command.
 
 ## Acknowledgements
 This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 957189. The project is part of BATTERY 2030+, the large-scale European research initiative for inventing the sustainable batteries of the future.
 
-## License & copyright
+## License & Copyright
   Developer: Celso Ricardo C. Rêgo, 
   Multiscale Materials Modelling and Virtual Design,
   Institute of Nanotechnology, Karlsruhe Institute of Technology

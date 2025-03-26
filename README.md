@@ -12,7 +12,7 @@ Figure 1 illustrates the layout of the DFT-VASP WaNo, which features the `INCAR`
 **Fig 1** The DFT-VASP WaNo enables the performance of Density Functional Theory (DFT) calculations using the VASP code. It features an automated process for generating the `POTCAR` file after reading the `POSCAR` file. The user interface allows setting the `KPOINTS` and `INCAR` files and loading these input files in the Files-Run tab.
 
 ## 1. Python Setup
-To get this WaNo up and running on your available computational resources, have the below libraries installed on Python 3.6 or newer.
+To get this WaNo up and running on your available computational resources, you need to install the libraries below on Python 3.6 or newer.
 
 ```
 1. Atomic Simulation Environment (ASE).
@@ -21,20 +21,20 @@ To get this WaNo up and running on your available computational resources, have 
 ```
 
 ## 2. DFT-VASP files and Inputs
-- **INCAR tab**: See the GUI of this WaNo. as an option, we can set all INCAR flags available within VASP. However, we expose only a few of them, which are essential for the problem. A brief description of each flag pops up when we hover the mouse over the inputs.
+- **INCAR tab**: See the GUI of this WaNo. We can set all INCAR flags available within VASP as an option. However, we expose only a few of them, which are essential for the problem. A brief description of each flag pops up when we hover the mouse over the inputs.
 - **KPOINTS tab**: Here the user can define two types of KPOINTS, `Kpoints_length` and `Kpoints_Monkhorst`.
 - **Analysis tab**: Aimed to compute Bader charge analysis and DOS.
-- **Files-Run tab**: Mandatory loads the POSCAR file, and as an option can load INCAR, POTCAR, KPOINTS, and KORINGA files. The KORINGA file can be any file. In the case of this problem, it loads the Input_data.yml file.
+- **Files-Run tab**: Mandatory loads the POSCAR file, and as an option, it can load INCAR, POTCAR, KPOINTS, and KORINGA files. The KORINGA file can be any file. In the case of this problem, it loads the Input_data.yml file.
 - **Properties tab**: (:warning: **The `vasp_results.yml` database is replacing this tab.** Check down below to see the available properties in the database!).
 - All `.py` scripts may generate the INCAR, POTCAR, and KPOINTS files. 
 
 ## 3. DFT-VASP Output
 - `OUTCAR`    
-    - This file contains vital information about the simulation of the system.
+    - This file contains vital information about the system's simulation.
 - `CONTCAR`
     - The CONTCAR file contains information about the structure, e.g., the ionic positions.
 - `POTCAR`
-    - The POTCAR file essentially contains the pseudopotential for each atomic species used in the calculation.
+    - The POTCAR file contains the pseudopotential for each atomic species used in the calculation.
 - `CHGCAR`
     - VASP stores the charge density and the PAW one-center occupancies in the CHGCAR file, which can also be used to restart calculations.
 - `vasp_results.yml`
